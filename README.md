@@ -12,6 +12,22 @@ The repository holds the collision-avoidance environment, the scenario generator
 the training curriculum, and the evaluation and scalability suites, all under
 `src/orbitzoo/thesis/`, plus the `oz` command-line interface that drives them.
 
+## Result
+
+At 150 agents on held-out scenarios, against a physics-based rule baseline:
+
+| Metric | Coasting | Rule | Policy |
+| --- | ---: | ---: | ---: |
+| Close approaches per episode | 101.20 | 10.40 | **7.95** |
+| Conjunctions resolved | — | 89.7% | **92.1%** |
+| Closest approach (m) | 40.6 | 206.9 | **422.9** |
+| Collisions | 0 | 0 | 0 |
+| Delta-v incl. return (m/s) | 0.00 | **1.40** | 1.95 |
+
+The policy is safer than the rule and its margin widens with population, at 39% more
+delta-v. Numbers come from a single training run over 20 episodes; see
+[TRAINING_RESULTS.md](docs/TRAINING_RESULTS.md) for the limitations.
+
 ## Documentation
 
 Start with [THESIS_IMPLEMENTATION.md](docs/THESIS_IMPLEMENTATION.md) for the
