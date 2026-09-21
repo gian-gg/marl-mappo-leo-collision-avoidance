@@ -20,6 +20,7 @@ from orbitzoo.thesis.environments.episodes import EpisodeSummary, play_episode
 from orbitzoo.thesis.environments.scenarios import EpisodeSource, build_episode_source
 from orbitzoo.thesis.evaluation.coordination import COORDINATION_COLUMNS, CoordinationCounts
 from orbitzoo.thesis.evaluation.policies import (
+    build_policy,
     ClohessyWiltshireAvoidancePolicy,
     EvaluationPolicy,
     MAPPOActorPolicy,
@@ -78,25 +79,6 @@ def evaluation_seeds(config: ExperimentConfig, episodes: int) -> list[int]:
         raise ValueError("episodes must be positive")
     start = config.seed + EVALUATION_SEED_OFFSET
     return list(range(start, start + episodes))
-
-
-def build_policy(spec: str, config: ExperimentConfig, local_observation_dim: int) -> EvaluationPolicy:
-    """Create a policy from ``noop``, ``rule``, ``PATH`` or ``NAME=PATH`` to a MAPPO checkpoint."""
-    if spec == "noop":
-        return NoOpPolicy()
-    if spec == "rule":
-        return ClohessyWiltshireAvoidancePolicy(config.maneuver, config.safety)
-    name, _, path = spec.rpartition("=")
-    checkpoint = Path(path).expanduser()
-    if not checkpoint.is_file():
-        raise FileNotFoundError(f"policy {spec!r} is not noop, rule, or an existing checkpoint")
-    policy = MAPPO.from_checkpoint(checkpoint)
-    if policy.local_observation_dim != local_observation_dim:
-        raise ValueError(
-            f"checkpoint expects local observations of width {policy.local_observation_dim}, "
-            f"but the environment produces {local_observation_dim}"
-        )
-    return MAPPOActorPolicy(policy, name or "mappo")
 
 
 def summarize(policy_name: str, episodes: Sequence[EpisodeSummary]) -> PolicySummary:

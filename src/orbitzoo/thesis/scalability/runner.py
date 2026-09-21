@@ -23,8 +23,7 @@ from orbitzoo.thesis.config import ExperimentConfig
 from orbitzoo.thesis.environments.observations import NEIGHBOR_FEATURE_DIM, OWN_FEATURE_DIM
 from orbitzoo.thesis.evaluation.coordination import COORDINATION_COLUMNS, CoordinationCounts
 from orbitzoo.thesis.evaluation.drift import return_delta_v
-from orbitzoo.thesis.evaluation.evaluator import build_policy
-from orbitzoo.thesis.evaluation.policies import EvaluationPolicy, NoOpPolicy
+from orbitzoo.thesis.evaluation.policies import EvaluationPolicy, NoOpPolicy, build_policy
 from orbitzoo.thesis.runtime import environment_info
 from orbitzoo.thesis.scalability.config import ScalabilityConfig
 from orbitzoo.thesis.scalability.screening import match_events

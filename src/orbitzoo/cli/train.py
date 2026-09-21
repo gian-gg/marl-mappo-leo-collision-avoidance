@@ -20,6 +20,8 @@ def train(args: argparse.Namespace) -> None:
             config = ExperimentConfig.load(run_directory / "config.json")
         else:
             config = ExperimentConfig.load(Path(args.config).expanduser())
+            if args.seed is not None:
+                config = replace(config, seed=args.seed)
             if args.initial_actor is not None:
                 checkpoint = args.initial_actor or None
                 config = replace(config, training=replace(config.training, initial_actor_checkpoint=checkpoint))
@@ -59,6 +61,11 @@ def add_train_parser(subparsers: argparse._SubParsersAction) -> None:
     command.add_argument(
         "--output",
         help="new run directory; existing paths are refused (default: runs/<timestamp>_mappo_seed<N>)",
+    )
+    command.add_argument(
+        "--seed",
+        type=int,
+        help="override the config's seed, for repeat runs of the same configuration",
     )
     command.add_argument(
         "--initial-actor",
