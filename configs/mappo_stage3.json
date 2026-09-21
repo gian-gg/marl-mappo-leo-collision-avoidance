@@ -82,7 +82,7 @@
     ],
     "critic_learning_rate": 0.001,
     "device": "cpu",
-    "entropy_coefficient": 0.05,
+    "entropy_coefficient": 0.01,
     "gae_lambda": 0.95,
     "gamma": 0.99,
     "initial_actor_checkpoint": "runs/stage2/checkpoints/latest.pt",

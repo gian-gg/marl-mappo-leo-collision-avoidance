@@ -214,6 +214,7 @@ the frozen benchmark:
 | Miss direction as a unit vector | 7 | same-direction pair burns 18 to 0 |
 | Shaping previews the flat penalty | 8 | close approaches 4.10 to 3.10 |
 | Meeting-time floor 480 s to 360 s | 9 | close approaches 3.10 to 2.40 |
+| Entropy coefficient 0.05 to 0.01, stages 2 and 3 | 10 | total delta-v 1.95 to 1.76 |
 
 Against the rule's 4.30 close approaches per episode, the actor now reaches 2.40,
 at 65% more delta-v.
@@ -221,6 +222,54 @@ at 65% more delta-v.
 With these weights a 500 m close approach costs 15 and one 0.5 m/s burn costs 0.5,
 so a successful avoidance clearly outweighs its fuel, while a collision still costs
 more than any near miss.
+
+## Trial 10 — entropy coefficient, stage 2 and stage 3
+
+The second curriculum run cost 39% more delta-v than the rule. Counting every burn
+over 20 episodes at 64 agents showed where it went:
+
+| | Rule | v2 actor |
+| --- | ---: | ---: |
+| Burns | 1,731 | 2,409 |
+| Fired while a threat was flagged | 100% | 65% |
+| Fired with no threat flagged | 0% | **35%** |
+| Predicted miss already beyond 1 km | 0% | 35% |
+
+A third of the actor's burns were fired at nothing. Removing them would have brought
+delta-v to 0.614, below the rule's 0.676, so the entire fuel gap was waste rather
+than caution.
+
+The cause was the entropy bonus. Its coefficient of 0.05 was chosen in trial 3 to
+escape the never-maneuver collapse, when the reward signal was weak. Trials 7 to 9
+made the reward much richer, and the same bonus then pushed the policy toward uniform
+action probabilities: entropy *rose* through stage 2 (0.148 to 0.429) and reached
+0.894 in stage 3. Where no threat exists every action has near-identical value, so
+the bonus dominates and the deterministic argmax fires an arbitrary burn.
+
+Two runs lowered it to 0.01, first in stage 3 alone (v3, reusing the v2 stage-2
+actor) and then in stages 2 and 3 (v4, a full curriculum). Stage 1 kept 0.05, since
+that is where maneuvering must first be discovered and where trial 2 collapsed.
+
+| Metric, 150 agents | Rule | v2 | v3 | v4 |
+| --- | ---: | ---: | ---: | ---: |
+| Close approaches | 10.40 | 7.95 | 8.65 | **7.45** |
+| Wilcoxon p against the rule | — | 0.0015 | 0.0055 | **0.0003** |
+| Closest (m) | 206.9 | **422.9** | 275.6 | 249.6 |
+| Delta-v (m/s) | **0.670** | 0.928 | 0.800 | 0.860 |
+| Delta-v including return | **1.40** | 1.95 | **1.65** | 1.76 |
+
+No-threat burns fell from 35% to 21% under v3. Entropy converged to 0.09 in v3 and
+0.07 in v4 instead of climbing, and unsafe agent-steps fell at the same time, so the
+burns removed were the useless ones.
+
+Lowering stage 2 as well did not compound the saving: v4 costs more than v3 at both
+sizes, the opposite of what their training metrics suggested. Training delta-v is
+measured with exploration noise on generated scenarios and does not map cleanly onto
+deterministic held-out behaviour.
+
+v4 is adopted because it is the safest at 150 agents with the strongest significance,
+and cheaper than v2. The remaining 7% gap between v3 and v4 in total delta-v is
+smaller than the uncertainty from a single training seed, so fuel tuning stopped here.
 
 ## Trial artifacts
 
@@ -232,6 +281,8 @@ Stage-2 checkpoints for trials 7 to 9, all evaluated with
 | 7 | `runs/sym_stage2` | `20746aa083c027a5` |
 | 8 | `runs/pot_stage2` | `f36a372c06214852` |
 | 9 | `runs/lead_stage2` | `09f67424d3c57859` |
+| 10 (v3) | `runs/v3_stage3` | `d394629cbefd3a28` |
+| 10 (v4) | `runs/v4_stage3` | `98bba412582ba669` |
 
 Diagnostics are in `runs/trials/1{1,2,4}_*.json`. Code revision `5ec089b`; seed 42.
 
