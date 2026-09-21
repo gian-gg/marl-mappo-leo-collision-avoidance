@@ -24,7 +24,7 @@ from orbitzoo.thesis.scalability.dynamics import (
     propagate_hill_states,
 )
 from orbitzoo.thesis.environments.vectorized_observations import CatalogState, encode_local_observations, rsw_bases, top_neighbors
-from orbitzoo.thesis.scalability.runner import build_scenarios, leo_objects, run_scalability
+from orbitzoo.thesis.scalability.runner import build_scenarios, leo_objects, run_scalability, _drop_colocated
 from orbitzoo.thesis.scalability.screening import (
     ConjunctionEvent,
     ConjunctionTracker,
@@ -341,3 +341,13 @@ def test_maneuvering_agents_report_their_final_slot_offset() -> None:
 
     assert coasting.slot_deviation.distances_m[0] == 0.0
     assert avoiding.slot_deviation.distances_m[0] > 100.0
+
+
+def test_colocated_objects_are_collapsed_to_one() -> None:
+    """Docked structures share a position and would report unavoidable conjunctions at time zero."""
+    positions = np.array(
+        [[7.0e6, 0.0, 0.0], [7.0e6 + 5.0, 0.0, 0.0], [7.0e6 + 10.0, 0.0, 0.0], [7.1e6, 0.0, 0.0]]
+    )
+
+    assert _drop_colocated(positions, 1_000.0) == [0, 3]
+    assert _drop_colocated(positions, 0.0) == [0, 1, 2, 3]

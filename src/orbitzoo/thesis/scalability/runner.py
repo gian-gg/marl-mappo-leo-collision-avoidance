@@ -14,6 +14,7 @@ import sys
 from typing import Callable, Sequence
 
 import numpy as np
+from scipy.spatial import cKDTree
 from sgp4.earth_gravity import wgs72
 
 from orbitzoo.thesis.calibration.catalog import load_catalog
@@ -98,12 +99,27 @@ def leo_objects(config: ScalabilityConfig, config_path: Path) -> tuple[tuple[Cat
     positions, _ = SGP4Trajectory(objects, catalog.latest_epoch_utc).states(np.zeros(1))
     altitudes = np.linalg.norm(positions[:, 0], axis=1) - wgs72.radiusearthkm * 1_000.0
     band = config.catalog
-    retained = tuple(
-        item
-        for item, altitude in zip(objects, altitudes)
+    in_band = [
+        index
+        for index, altitude in enumerate(altitudes)
         if band.minimum_altitude_meters <= altitude <= band.maximum_altitude_meters
-    )
+    ]
+    keep = _drop_colocated(positions[in_band, 0], config.colocation_separation_meters)
+    retained = tuple(objects[in_band[index]] for index in keep)
     return retained, catalog.latest_epoch_utc
+
+
+def _drop_colocated(positions: np.ndarray, separation_meters: float) -> list[int]:
+    """Keep one object per group already inside ``separation_meters`` at epoch.
+
+    Docked structures are catalogued separately but share a position, so every pair inside the
+    group reports a conjunction at time zero that no maneuver could avoid.
+    """
+    if separation_meters <= 0 or len(positions) < 2:
+        return list(range(len(positions)))
+    pairs = cKDTree(positions).query_pairs(separation_meters, output_type="ndarray")
+    dropped = {int(second) for _, second in pairs}
+    return [index for index in range(len(positions)) if index not in dropped]
 
 
 def build_scenarios(config: ScalabilityConfig, objects: Sequence[CatalogObject], sweeps: Sequence[str]) -> list[Scenario]:
