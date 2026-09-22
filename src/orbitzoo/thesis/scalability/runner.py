@@ -27,6 +27,7 @@ from orbitzoo.thesis.evaluation.drift import return_delta_v
 from orbitzoo.thesis.evaluation.policies import EvaluationPolicy, NoOpPolicy, build_policy
 from orbitzoo.thesis.runtime import environment_info
 from orbitzoo.thesis.scalability.config import ScalabilityConfig
+from orbitzoo.thesis.scalability.synthetic import densify
 from orbitzoo.thesis.scalability.screening import match_events
 from orbitzoo.thesis.scalability.simulator import (
     TIMING_STAGES,
@@ -106,7 +107,7 @@ def leo_objects(config: ScalabilityConfig, config_path: Path) -> tuple[tuple[Cat
     ]
     keep = _drop_colocated(positions[in_band, 0], config.colocation_separation_meters)
     retained = tuple(objects[in_band[index]] for index in keep)
-    return retained, catalog.latest_epoch_utc
+    return densify(retained, config.density_multiplier, config.seed), catalog.latest_epoch_utc
 
 
 def _drop_colocated(positions: np.ndarray, separation_meters: float) -> list[int]:
@@ -129,12 +130,16 @@ def build_scenarios(config: ScalabilityConfig, objects: Sequence[CatalogObject],
         candidates = [item for item in objects if item.is_agent_candidate]
         others = [item for item in objects if not item.is_agent_candidate]
         order = np.random.default_rng([config.seed, 0]).permutation(len(others))
-        for size in config.catalog_sizes:
-            if not len(candidates) <= size <= len(objects):
+        seen: set[int] = set()
+        for requested in config.catalog_sizes:
+            size = min(requested, len(objects))
+            if size < len(candidates):
                 raise ValueError(
-                    f"catalog size {size} must lie between the {len(candidates)} agent candidates "
-                    f"and the {len(objects)} retained objects"
+                    f"catalog size {requested} is below the {len(candidates)} agent candidates"
                 )
+            if size in seen:
+                continue
+            seen.add(size)
             chosen = sorted(candidates + [others[index] for index in order[: size - len(candidates)]], key=lambda item: item.norad_id)
             agents = np.flatnonzero([item.is_agent_candidate for item in chosen])
             scenarios.append(Scenario(CATALOG_SWEEP, tuple(chosen), agents))

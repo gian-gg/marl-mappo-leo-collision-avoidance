@@ -109,6 +109,32 @@ under the more exploratory policy of trial 9, which had 9 and 14 of them.
 The remaining weakness is coasting: of the 142 conjunctions at 150 agents where
 neither satellite maneuvered, 15 were not resolved.
 
+## Seed repeat
+
+The whole curriculum was trained again from scratch with seed 7, on an NVIDIA GB10
+node, and evaluated on the same frozen benchmark.
+
+| Policy | Close approaches | Closest (m) | Mean shortfall | Delta-v (m/s) |
+| --- | ---: | ---: | ---: | ---: |
+| Rule | 10.40 | 206.9 | 0.217 | 0.670 |
+| Seed 42 | 7.45 | 249.6 | 0.177 | 0.860 |
+| Seed 7 | **7.05** | **340.4** | 0.203 | 0.894 |
+
+Two independent runs resolve 92.6% and 93.0% of the conjunctions a coasting
+constellation would suffer, against the rule's 89.7%. The result does not depend on
+one lucky initialization.
+
+The spread between seeds is 0.40 close approaches per episode. Differences smaller
+than that, in this or any other comparison, are not separable from training noise.
+
+## Multi-threat stress test
+
+Double threats are 15% of this benchmark. Raising their share shows the margin over
+the rule growing from 2.9 points to 7.5, with the policy ahead in 59 of 60 episodes:
+see [MULTITHREAT_BENCHMARK.md](MULTITHREAT_BENCHMARK.md). At catalog scale, where
+threats arrive a median of 96 minutes apart, the two policies tie — see
+[SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md).
+
 ## Comparison with the first curriculum run
 
 The first run, before trials 7 to 9, resolved 93% at 16 agents, 91% at 64 and 90% at
@@ -136,9 +162,9 @@ macOS 26.0 on Apple M1.
 
 ## Limitations and open work
 
-- **One seed.** Every number here comes from a single training run. The paired tests
-  measure episode variance, not training variance. Seed repeats are needed before
-  these results are reported as robust.
+- **Two seeds.** Seeds 42 and 7 give 7.45 and 7.05 close approaches at 150 agents.
+  Two runs establish that the result reproduces; they do not give a confidence
+  interval, and differences under 0.40 per episode are inside the observed spread.
 - **Delta-v.** The actor costs 26% more than the rule in total. Trial 10 removed the
   burns fired at nothing; the remainder is genuine avoidance cost, and further tuning
   moved results by less than the single-seed uncertainty.

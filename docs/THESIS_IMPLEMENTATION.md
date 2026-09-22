@@ -89,8 +89,11 @@ delta-v and minimum thrust from the reference conjunctions.
 orbits and real close-call geometry, in a 16 → 64 → 150 agent curriculum.
 [Training trials](TRAINING_TRIALS.md) record the short runs that chose the reward
 weights and exploration settings used by the curriculum, and
-[training results](TRAINING_RESULTS.md) record the first full curriculum run and its
-evaluation against the no-op and rule-based baselines.
+[training results](TRAINING_RESULTS.md) record the adopted curriculum run, its seed
+repeat, and its evaluation against the no-op and rule-based baselines.
+[Multi-threat benchmark](MULTITHREAT_BENCHMARK.md) measures where the actor beats the
+rule and by how much; [scalability results](SCALABILITY_RESULTS.md) measure how often
+that situation occurs, the per-agent cost to 10,000 agents, and the fuel penalty.
 
 The actor now receives fixed-width, threat-ranked local observations containing
 `k` relative-neighbour blocks with explicit padding masks. The critic receives

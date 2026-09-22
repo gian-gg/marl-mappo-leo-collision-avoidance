@@ -25,6 +25,7 @@ from orbitzoo.thesis.scalability.dynamics import (
 )
 from orbitzoo.thesis.environments.vectorized_observations import CatalogState, encode_local_observations, rsw_bases, top_neighbors
 from orbitzoo.thesis.scalability.runner import build_scenarios, leo_objects, run_scalability, _drop_colocated
+from orbitzoo.thesis.scalability.synthetic import SYNTHETIC_ID_BASE, tle_checksum
 from orbitzoo.thesis.scalability.screening import (
     ConjunctionEvent,
     ConjunctionTracker,
@@ -351,3 +352,26 @@ def test_colocated_objects_are_collapsed_to_one() -> None:
 
     assert _drop_colocated(positions, 1_000.0) == [0, 3]
     assert _drop_colocated(positions, 0.0) == [0, 1, 2, 3]
+
+
+def test_catalog_sizes_clamp_to_the_retained_catalog(synthetic_config: Path) -> None:
+    """A requested size larger than the catalog means all of it, not an error."""
+    config = ScalabilityConfig.load(synthetic_config)
+    objects, _ = leo_objects(config, synthetic_config)
+    config = ScalabilityConfig(**{**config.__dict__, "catalog_sizes": (8, len(objects) + 500)})
+
+    sizes = [len(scenario.objects) for scenario in build_scenarios(config, objects, ("catalog",))]
+
+    assert sizes == [8, len(objects)]
+
+
+def test_densify_copies_payloads_into_new_planes() -> None:
+    """Copies share the template's orbit shape and differ only in plane and phase."""
+    config = ScalabilityConfig.load(Path("configs/scalability_shell.json"))
+    objects, _ = leo_objects(config, Path("configs/scalability_shell.json"))
+    copies = [item for item in objects if item.norad_id >= SYNTHETIC_ID_BASE]
+
+    assert copies, "densify produced no copies"
+    for copy in copies[:20]:
+        assert copy.line2[8:16] == copy.line2[8:16]
+        assert int(copy.line2[68]) == tle_checksum(copy.line2)

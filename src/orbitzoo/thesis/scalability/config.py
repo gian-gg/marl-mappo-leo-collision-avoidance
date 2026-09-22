@@ -24,6 +24,7 @@ class ScalabilityConfig:
     initial_fuel_mass_kg: float = 50.0
     seed: int = 0
     colocation_separation_meters: float = 1_000.0
+    density_multiplier: int = 1
     catalog_sizes: tuple[int, ...] = (1_000, 2_000, 5_000, 10_000, 20_000)
     hypothetical_agent_counts: tuple[int, ...] = (1_000, 2_000, 5_000, 10_000)
     schema_version: int = 1
@@ -33,6 +34,8 @@ class ScalabilityConfig:
         object.__setattr__(self, "hypothetical_agent_counts", tuple(self.hypothetical_agent_counts))
 
     def validate(self) -> None:
+        if self.density_multiplier < 1:
+            raise ValueError("density_multiplier must be at least 1")
         if self.colocation_separation_meters < 0:
             raise ValueError("colocation_separation_meters cannot be negative")
         if self.schema_version != 1:

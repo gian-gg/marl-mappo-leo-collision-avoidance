@@ -1,0 +1,29 @@
+{
+  "catalog": {
+    "default_radius_meters": 1.0,
+    "maximum_altitude_meters": 600000.0,
+    "maximum_tle_age_days": 14.0,
+    "metadata_path": "../data/full/objects.csv",
+    "minimum_altitude_meters": 500000.0,
+    "tle_path": "../data/full/catalog.tle"
+  },
+  "catalog_sizes": [
+    15000
+  ],
+  "density_multiplier": 8,
+  "dry_mass_kg": 200.0,
+  "duration_seconds": 21600,
+  "experiment_config": "mappo_toy.json",
+  "fine_step_seconds": 10,
+  "hypothetical_agent_counts": [
+    2000,
+    5000,
+    10000,
+    14000
+  ],
+  "initial_fuel_mass_kg": 50.0,
+  "match_tolerance_seconds": 300.0,
+  "maximum_relative_speed_mps": 20000.0,
+  "schema_version": 1,
+  "seed": 0
+}

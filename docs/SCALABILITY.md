@@ -24,6 +24,25 @@ Populations are nested: each smaller population is a subset of the next. The
 `agents` sweep is hypothetical: it asks what happens if every satellite ran the
 policy, regardless of its real maneuverability.
 
+## Catalog preparation
+
+Two settings shape the population before either sweep runs.
+
+| Setting | Default | Effect |
+| --- | ---: | --- |
+| `colocation_separation_meters` | 1,000 | Keeps one object per group already inside this range at epoch |
+| `density_multiplier` | 1 | Adds this many phase- and plane-shifted copies of every payload |
+
+Docked structures such as the ISS are catalogued as separate objects sharing one
+position, and every pair inside such a group reports an unavoidable conjunction at
+zero range. The co-location filter removes them; see
+[SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md).
+
+Densification projects a shell forward to a larger constellation. Copies keep their
+template's inclination, eccentricity and mean motion, so they occupy the same shell
+and differ only in right ascension and mean anomaly, as in a Walker pattern. Set it
+above 1 only for projected-population studies; the real-catalog sweeps use 1.
+
 ## Simulation model
 
 - **Reference motion.** Every object follows its SGP4 trajectory (TEME frame)
@@ -90,3 +109,5 @@ occurs under the policy.
 - The observation screen is exact but dense: its cost is proportional to agents
   times catalog objects.
 - Peak memory is reported for the whole process, not per scenario.
+- Each sweep point is one draw of the population, so conjunction counts carry no
+  error bars. Repeat with different `seed` values to separate signal from noise.

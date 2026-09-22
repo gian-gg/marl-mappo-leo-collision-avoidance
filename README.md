@@ -18,15 +18,22 @@ At 150 agents on held-out scenarios, against a physics-based rule baseline:
 
 | Metric | Coasting | Rule | Policy |
 | --- | ---: | ---: | ---: |
-| Close approaches per episode | 101.20 | 10.40 | **7.95** |
-| Conjunctions resolved | — | 89.7% | **92.1%** |
-| Closest approach (m) | 40.6 | 206.9 | **422.9** |
+| Close approaches per episode | 101.20 | 10.40 | **7.45** |
+| Conjunctions resolved | — | 89.7% | **92.6%** |
+| Closest approach (m) | 40.6 | 206.9 | **249.6** |
 | Collisions | 0 | 0 | 0 |
-| Delta-v incl. return (m/s) | 0.00 | **1.40** | 1.95 |
+| Delta-v incl. return (m/s) | 0.00 | **1.40** | 1.76 |
 
-The policy is safer than the rule and its margin widens with population, at 39% more
-delta-v. Numbers come from a single training run over 20 episodes; see
-[TRAINING_RESULTS.md](docs/TRAINING_RESULTS.md) for the limitations.
+Retraining from scratch with a different seed gives 7.05, so the result reproduces.
+
+The margin over the rule comes from encounters where a satellite faces two threats at
+once. Raising their share from 15% to 100% of the mix grows the margin from 2.9 to 7.5
+points, with the policy ahead in 59 of 60 episodes
+([MULTITHREAT_BENCHMARK.md](docs/MULTITHREAT_BENCHMARK.md)). Those encounters are rare
+in today's catalog, where the policy instead ties the rule while its cost per
+satellite stays flat to 10,000 agents
+([SCALABILITY_RESULTS.md](docs/SCALABILITY_RESULTS.md)). It spends 23–28% more
+delta-v throughout.
 
 ## Documentation
 
@@ -49,6 +56,8 @@ architecture, repository layout, and current status.
 | [TRAINING_RESULTS.md](docs/TRAINING_RESULTS.md) | the full curriculum run and its evaluation |
 | [EVALUATION.md](docs/EVALUATION.md) | baselines, metrics, frozen benchmark |
 | [SCALABILITY.md](docs/SCALABILITY.md) | the large-population evaluator |
+| [MULTITHREAT_BENCHMARK.md](docs/MULTITHREAT_BENCHMARK.md) | where the policy beats the rule, and by how much |
+| [SCALABILITY_RESULTS.md](docs/SCALABILITY_RESULTS.md) | catalog-scale results and what they show about LEO |
 
 ## Getting started
 
