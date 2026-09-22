@@ -1,6 +1,6 @@
 """Settings for seeded scenario generation. Paths are relative to the working directory.
 
-See docs/TRAINING_SCENARIOS.md.
+See docs/design/TRAINING_SCENARIOS.md.
 """
 
 from __future__ import annotations

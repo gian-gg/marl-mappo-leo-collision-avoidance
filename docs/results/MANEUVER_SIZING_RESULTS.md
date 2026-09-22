@@ -13,7 +13,7 @@
 
 These values are the defaults in `thesis/config.py`, `configs/mappo_toy.json`,
 and `configs/mappo_smoke.json`. Method details are in
-[MANEUVER_SIZING.md](MANEUVER_SIZING.md).
+[MANEUVER_SIZING.md](../methods/MANEUVER_SIZING.md).
 
 ## Inputs
 

@@ -43,7 +43,7 @@ The feature order for one neighbour block is:
 The miss direction is a unit vector rather than the scaled miss vector, because
 the distance is already a separate feature and a scaled vector fades toward zero
 in exactly the tight conjunctions where its sign decides the burn. See
-[TRAINING_TRIALS.md](TRAINING_TRIALS.md).
+[TRAINING_TRIALS.md](../results/TRAINING_TRIALS.md).
 
 Candidate neighbours include both maneuvering satellites and debris. They are
 ranked deterministically by collision status, unsafe-conjunction status, predicted
@@ -143,7 +143,7 @@ policies on the same seeds.
 
 The code defaults charge a 500 m close approach 5 against 0.5 per burn. The training
 curriculum uses a close-approach penalty and shaping weight of 30 instead (a 500 m
-close approach costs 15), chosen in [training trials](TRAINING_TRIALS.md) because
+close approach costs 15), chosen in [training trials](../results/TRAINING_TRIALS.md) because
 with 10 the policy stopped exploring and learned never to maneuver. A collision
 costs 100 in both, more than any near miss.
 

@@ -2,7 +2,7 @@
 
 `oz size-maneuvers` chooses the delta-v of one discrete maneuver from the 496
 reference conjunctions found by the calibration. The adopted result is recorded in
-[MANEUVER_SIZING_FINDINGS.md](MANEUVER_SIZING_FINDINGS.md). It is a calculation, not a
+[MANEUVER_SIZING_FINDINGS.md](../results/MANEUVER_SIZING_RESULTS.md). It is a calculation, not a
 simulation: it runs in seconds, then spot-checks a sample in Orekit.
 
 ```sh

@@ -1,6 +1,6 @@
 """How far maneuvers moved each satellite from its nominal slot, and what a return would cost.
 
-Returning is out of scope for the policy; these quantities are only measured. See docs/EVALUATION.md.
+Returning is out of scope for the policy; these quantities are only measured. See docs/methods/EVALUATION.md.
 """
 
 from __future__ import annotations

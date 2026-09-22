@@ -1,6 +1,6 @@
 """Maneuver-sizing study over the calibration's reference conjunctions, with an Orekit spot-check.
 
-See docs/MANEUVER_SIZING.md.
+See docs/methods/MANEUVER_SIZING.md.
 """
 
 from __future__ import annotations

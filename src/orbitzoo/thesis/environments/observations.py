@@ -35,7 +35,7 @@ def miss_direction(miss_vector: np.ndarray) -> np.ndarray:
     """Unit vector pointing where the threat passes; zero when the miss vector is degenerate.
 
     The miss distance itself is a separate feature, so the direction carries full magnitude even
-    for a very close conjunction. See docs/COLLISION_AVOIDANCE_ENVIRONMENT.md.
+    for a very close conjunction. See docs/design/COLLISION_AVOIDANCE_ENVIRONMENT.md.
     """
     vector = np.asarray(miss_vector, dtype=float)
     norm = np.linalg.norm(vector, axis=-1, keepdims=True)

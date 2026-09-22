@@ -1,6 +1,6 @@
 """Continuous, safety-first reward for collision avoidance.
 
-See docs/COLLISION_AVOIDANCE_ENVIRONMENT.md#rewards-and-diagnostics.
+See docs/design/COLLISION_AVOIDANCE_ENVIRONMENT.md#rewards-and-diagnostics.
 """
 
 from __future__ import annotations

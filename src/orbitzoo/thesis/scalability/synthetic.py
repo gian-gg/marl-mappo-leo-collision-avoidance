@@ -1,6 +1,6 @@
 """Project a catalog forward to a denser constellation by adding shifted copies of real satellites.
 
-See docs/SCALABILITY.md.
+See docs/methods/SCALABILITY.md.
 """
 
 from __future__ import annotations

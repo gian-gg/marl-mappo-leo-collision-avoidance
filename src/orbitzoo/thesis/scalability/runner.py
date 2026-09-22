@@ -1,6 +1,6 @@
 """Catalog-size and agent-count sweeps for the frozen decentralized actor.
 
-See docs/SCALABILITY.md.
+See docs/methods/SCALABILITY.md.
 """
 
 from __future__ import annotations

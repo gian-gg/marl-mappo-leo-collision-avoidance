@@ -1,6 +1,6 @@
 """Run a frozen decentralized policy for many agents against a full catalog.
 
-See docs/SCALABILITY.md.
+See docs/methods/SCALABILITY.md.
 """
 
 from __future__ import annotations

@@ -1,6 +1,6 @@
 """Build one seeded episode: real agent orbits plus threats placed backwards from real close-call shapes.
 
-See docs/TRAINING_SCENARIOS.md.
+See docs/design/TRAINING_SCENARIOS.md.
 """
 
 from __future__ import annotations

@@ -13,7 +13,7 @@ The first run exposed that the straight-line miss prediction flagged real close
 calls only about 5.5 minutes ahead (median), leaving the rule too few decisions. The
 top threat's time-to-closest-approach and miss features were changed to a curved J2
 prediction, which flags them about 11 minutes ahead. See
-[COLLISION_AVOIDANCE_ENVIRONMENT.md](COLLISION_AVOIDANCE_ENVIRONMENT.md).
+[COLLISION_AVOIDANCE_ENVIRONMENT.md](../design/COLLISION_AVOIDANCE_ENVIRONMENT.md).
 
 | Policy | Close calls per episode | Closest (m) | Delta-v per agent (m/s) |
 | --- | ---: | ---: | ---: |

@@ -3,7 +3,7 @@
 The traditional collision-avoidance strategy specified in the thesis methodology: a
 fixed thrust along the satellite's orbital track once a conjunction crosses the risk
 threshold. It is implemented as `collinear` in
-[EVALUATION.md](EVALUATION.md) and measured here against the no-op reference, the
+[EVALUATION.md](../methods/EVALUATION.md) and measured here against the no-op reference, the
 stronger six-direction rule, and the trained actor.
 
 ## Result

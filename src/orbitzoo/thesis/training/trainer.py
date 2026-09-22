@@ -1,6 +1,6 @@
 """Train the shared MAPPO policy on the collision-avoidance environment.
 
-See docs/TRAINING.md.
+See docs/methods/TRAINING.md.
 """
 
 from __future__ import annotations

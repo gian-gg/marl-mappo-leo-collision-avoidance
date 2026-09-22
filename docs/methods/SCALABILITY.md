@@ -36,7 +36,7 @@ Two settings shape the population before either sweep runs.
 Docked structures such as the ISS are catalogued as separate objects sharing one
 position, and every pair inside such a group reports an unavoidable conjunction at
 zero range. The co-location filter removes them; see
-[SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md).
+[SCALABILITY_RESULTS.md](../results/SCALABILITY_RESULTS.md).
 
 Densification projects a shell forward to a larger constellation. Copies keep their
 template's inclination, eccentricity and mean motion, so they occupy the same shell

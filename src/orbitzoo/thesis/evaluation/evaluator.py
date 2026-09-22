@@ -1,6 +1,6 @@
 """Evaluate decentralized policies on identical held-out episodes.
 
-See docs/EVALUATION.md.
+See docs/methods/EVALUATION.md.
 """
 
 from __future__ import annotations

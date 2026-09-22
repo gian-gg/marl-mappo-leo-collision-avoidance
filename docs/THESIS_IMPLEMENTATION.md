@@ -50,53 +50,53 @@ Apple Metal (MPS), otherwise CPU. The choice is recorded for each run.
 The initial configuration is [configs/mappo_toy.json](../configs/mappo_toy.json).
 It uses 16 agents, seven discrete actions, and the calibrated neighborhood size
 `k = 1` and decision interval of 120 seconds (see
-[calibration findings](HYPERPARAMETER_CALIBRATION_FINDINGS.md)).
+[calibration findings](results/K_DT_RESULTS.md)).
 Its maneuver is 0.5 m/s per action at up to 7 N, as selected by the
-[maneuver sizing study](MANEUVER_SIZING_FINDINGS.md).
+[maneuver sizing study](results/MANEUVER_SIZING_RESULTS.md).
 
 ## Current status
 
 The discrete MAPPO implementation is validated independently of orbital physics.
-See [MAPPO.md](MAPPO.md) for its CTDE design and rollout API. The deterministic
-[toy environment](TOY_ENVIRONMENT.md) validates end-to-end shared-policy learning
+See [MAPPO.md](design/MAPPO.md) for its CTDE design and rollout API. The deterministic
+[toy environment](design/TOY_ENVIRONMENT.md) validates end-to-end shared-policy learning
 before the policy is connected to orbital simulation.
 
-The [maneuver contract](MANEUVER_CONTRACT.md) defines the discrete action IDs,
+The [maneuver contract](design/MANEUVER_CONTRACT.md) defines the discrete action IDs,
 their RSW thrust directions, finite-burn execution, and delta-v accounting.
 
-The [collision-avoidance environment](COLLISION_AVOIDANCE_ENVIRONMENT.md)
+The [collision-avoidance environment](design/COLLISION_AVOIDANCE_ENVIRONMENT.md)
 connects that contract to OrbitZoo propagation, deterministic conjunction
 screening, rewards, episode termination, and diagnostics.
 
 The environment is verified end to end on Orekit: action directions, burn
 displacement, fuel and delta-v accounting, determinism, termination, and the full
-reward table (see [verification](COLLISION_AVOIDANCE_ENVIRONMENT.md#verification)).
+reward table (see [verification](design/COLLISION_AVOIDANCE_ENVIRONMENT.md#verification)).
 Bodies are now created at the configured initial epoch, so real calendar epochs
 propagate correctly.
 
-The [training loop](TRAINING.md) (`oz train`) trains the shared policy on the
+The [training loop](methods/TRAINING.md) (`oz train`) trains the shared policy on the
 environment, with time-limit bootstrapping, per-update metrics, TensorBoard logs,
 checkpoints, and exact resume. Its scenario source is pluggable; only the
 development fixture exists until the training scenarios are built.
-[Evaluation](EVALUATION.md) (`oz evaluate`) compares trained checkpoints with
+[Evaluation](methods/EVALUATION.md) (`oz evaluate`) compares trained checkpoints with
 no-op and rule-based Clohessy–Wiltshire baselines on identical held-out episodes.
-The [scalability evaluation](SCALABILITY.md) (`oz scale`) runs the frozen actor
+The [scalability evaluation](methods/SCALABILITY.md) (`oz scale`) runs the frozen actor
 against the full TLE catalog, sweeping catalog size and agent count, and reports
 conjunctions, maneuver-induced secondary conjunctions, delta-v, and per-stage cost.
-[Maneuver sizing](MANEUVER_SIZING.md) (`oz size-maneuvers`) derives the per-action
+[Maneuver sizing](methods/MANEUVER_SIZING.md) (`oz size-maneuvers`) derives the per-action
 delta-v and minimum thrust from the reference conjunctions.
-[Training scenarios](TRAINING_SCENARIOS.md) are generated per episode from real
+[Training scenarios](design/TRAINING_SCENARIOS.md) are generated per episode from real
 orbits and real close-call geometry, in a 16 → 64 → 150 agent curriculum.
-[Training trials](TRAINING_TRIALS.md) record the short runs that chose the reward
+[Training trials](results/TRAINING_TRIALS.md) record the short runs that chose the reward
 weights and exploration settings used by the curriculum, and
-[training results](TRAINING_RESULTS.md) record the adopted curriculum run, its seed
+[training results](results/TRAINING_RESULTS.md) record the adopted curriculum run, its seed
 repeat, and its evaluation against the no-op and rule-based baselines.
-[Multi-threat benchmark](MULTITHREAT_BENCHMARK.md) measures where the actor beats the
-rule and by how much; [scalability results](SCALABILITY_RESULTS.md) measure how often
+[Multi-threat benchmark](results/MULTITHREAT_BENCHMARK.md) measures where the actor beats the
+rule and by how much; [scalability results](results/SCALABILITY_RESULTS.md) measure how often
 that situation occurs, the per-agent cost to 10,000 agents, and the fuel penalty;
-[fuel trade-off](FUEL_TRADEOFF.md) retrains the curriculum at four delta-v penalties
+[fuel trade-off](results/FUEL_TRADEOFF.md) retrains the curriculum at four delta-v penalties
 and shows the margin depends on the burns a cheaper policy stops making;
-[collinear baseline](COLLINEAR_BASELINE.md) measures the traditional along-track
+[collinear baseline](results/COLLINEAR_BASELINE.md) measures the traditional along-track
 heuristic that the methodology names.
 
 The actor now receives fixed-width, threat-ranked local observations containing
@@ -104,7 +104,7 @@ The actor now receives fixed-width, threat-ranked local observations containing
 a separate, deterministic full-system training state. This makes the deployed
 actor input independent of constellation population size.
 
-The versioned [calibration configuration](K_DT_CALIBRATION.md) defines the
+The versioned [calibration configuration](methods/K_DT_CALIBRATION.md) defines the
 catalog inputs, propagation window, candidate values, deterministic seeds, and
 passing thresholds that will be used to select `k` and the decision interval
 before MAPPO training. Its strict catalog loader now validates two-line and
@@ -113,7 +113,7 @@ freshness cutoff, and joins optional object metadata. Validated calibration data
 models provide SI-unit Cartesian frames, deterministic agent selections,
 ID-based conjunctions and neighbor rankings, combination metrics, and final
 recommendations without coupling reference results to the runtime safety model.
-The [propagation layer](K_DT_CALIBRATION.md#two-resolution-propagation) runs a
+The [propagation layer](methods/K_DT_CALIBRATION.md#two-resolution-propagation) runs a
 60-second pass whose spatial index contains the full catalog but is queried only
 from selected-agent positions. It excludes self and catalog-only pairs,
 deduplicates agent-agent pairs, merges conservative candidate encounter windows,

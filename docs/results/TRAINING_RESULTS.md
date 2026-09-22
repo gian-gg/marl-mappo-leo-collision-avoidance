@@ -3,7 +3,7 @@
 Final curriculum run, with the settings adopted in trials 7 to 10, and its evaluation
 against the baselines. Settings and their evidence are in
 [TRAINING_TRIALS.md](TRAINING_TRIALS.md); scenarios are described in
-[TRAINING_SCENARIOS.md](TRAINING_SCENARIOS.md).
+[TRAINING_SCENARIOS.md](../design/TRAINING_SCENARIOS.md).
 
 ## Headline result
 

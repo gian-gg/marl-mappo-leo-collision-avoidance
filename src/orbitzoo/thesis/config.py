@@ -14,7 +14,7 @@ from orbitzoo.thesis.scenarios.config import ScenarioGeneratorConfig
 
 
 def default_maneuver_config() -> ManeuverConfig:
-    """Return the maneuver selected by the sizing study (docs/MANEUVER_SIZING_FINDINGS.md)."""
+    """Return the maneuver selected by the sizing study (docs/results/MANEUVER_SIZING_RESULTS.md)."""
     return ManeuverConfig(
         commanded_delta_v_mps=0.5,
         maximum_thrust_newtons=7.0,
@@ -166,7 +166,7 @@ class ExperimentConfig:
         removed = sorted(set(raw.get("rewards", {})) & set(REMOVED_REWARD_FIELDS))
         if removed:
             raise ValueError(
-                f"{path} uses removed reward fields {removed}; see docs/COLLISION_AVOIDANCE_ENVIRONMENT.md"
+                f"{path} uses removed reward fields {removed}; see docs/design/COLLISION_AVOIDANCE_ENVIRONMENT.md"
             )
         config = cls(
             seed=raw["seed"],

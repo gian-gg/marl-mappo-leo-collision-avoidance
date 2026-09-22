@@ -1,6 +1,6 @@
 """Delta-v needed to clear real reference conjunctions, by warning time.
 
-See docs/MANEUVER_SIZING.md.
+See docs/methods/MANEUVER_SIZING.md.
 """
 
 from __future__ import annotations

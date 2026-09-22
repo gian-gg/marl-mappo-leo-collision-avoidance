@@ -2,7 +2,7 @@
 
 The frozen actor run at catalog scale against the no-op and rule baselines, and what
 the sweeps measured about LEO itself. The evaluator is described in
-[SCALABILITY.md](SCALABILITY.md); the policy is the one adopted in
+[SCALABILITY.md](../methods/SCALABILITY.md); the policy is the one adopted in
 [TRAINING_RESULTS.md](TRAINING_RESULTS.md).
 
 ## Headline result
@@ -70,7 +70,7 @@ minutes apart.
 
 To test whether density changes this, the 500–600 km shell was projected forward to
 eight times its population by adding phase- and plane-shifted copies of real
-satellites (`density_multiplier`, see [SCALABILITY.md](SCALABILITY.md)). That raised
+satellites (`density_multiplier`, see [SCALABILITY.md](../methods/SCALABILITY.md)). That raised
 conjunctions thirty-fold and left the timing untouched:
 
 | | Real catalog | Shell at 8x density |

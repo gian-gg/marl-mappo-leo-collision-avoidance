@@ -24,7 +24,7 @@ directory and continues from its latest checkpoint until `training.total_updates
 
 - `development`: the fixed four-satellite, one-debris fixture, reset with each seed.
 - `generated`: a new scenario per episode from real orbits and real close calls; see
-  [TRAINING_SCENARIOS.md](TRAINING_SCENARIOS.md).
+  [TRAINING_SCENARIOS.md](../design/TRAINING_SCENARIOS.md).
 
 The number of spacecraft must equal `environment.num_agents`.
 
