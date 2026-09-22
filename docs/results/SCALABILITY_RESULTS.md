@@ -10,12 +10,12 @@ the sweeps measured about LEO itself. The evaluator is described in
 At 10,000 maneuvering satellites in the real catalog, the learned policy matches a
 physics-based rule on safety and costs the same per satellite as doing nothing.
 
-| Agents | No-op | Rule | v4 | seed 7 |
-| ---: | ---: | ---: | ---: | ---: |
-| 1,000 | 26 | 1 (96.2%) | 1 (96.2%) | 1 (96.2%) |
-| 2,000 | 41 | 1 (97.6%) | 1 (97.6%) | 1 (97.6%) |
-| 5,000 | 79 | 2 (97.5%) | 3 (96.2%) | 3 (96.2%) |
-| 10,000 | 118 | 5 (95.8%) | 8 (93.2%) | 6 (94.9%) |
+| Agents | No-op | Collinear | Rule | v4 | seed 7 |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1,000 | 26 | 4 (84.6%) | 1 (96.2%) | 1 (96.2%) | 1 (96.2%) |
+| 2,000 | 41 | 4 (90.2%) | 1 (97.6%) | 1 (97.6%) | 1 (97.6%) |
+| 5,000 | 79 | 7 (91.1%) | 2 (97.5%) | 3 (96.2%) | 3 (96.2%) |
+| 10,000 | 118 | 10 (91.5%) | 5 (95.8%) | 8 (93.2%) | 6 (94.9%) |
 
 Conjunctions remaining, and the share of the no-op total resolved. 19,984 objects,
 6 hours, 1 km safe separation. No collisions under any policy at any size.
@@ -119,7 +119,20 @@ coordination.** The apparent edge at 32 pairs was noise.
 
 ## Fuel
 
-The policy is consistently the more expensive of the two.
+The policy is consistently the more expensive of the two, and the collinear heuristic
+is the most expensive of the three. At 10,000 agents on the real catalog:
+
+| Policy | Maneuvers | Slot drift (m) | Avoidance | Return | **Total** |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Collinear | 217 | **355** | 0.0109 | 0.0370 | **0.0479** |
+| Rule | 185 | **125** | **0.0093** | 0.0161 | **0.0254** |
+| v4 | **336** | 161 | 0.0168 | 0.0207 | **0.0375** |
+
+The actor makes 55% more burns than the collinear heuristic yet drifts less than half
+as far: along-track thrust changes the orbital period, radial and cross-track
+separations do not. Collinear's drift is 2.8 times the rule's at 10,000 agents against
+1.9 times at 150, so the penalty grows with population. See
+[COLLINEAR_BASELINE.md](COLLINEAR_BASELINE.md).
 
 | Population | Policy | Maneuvers | Delta-v per agent | Burns per conjunction resolved |
 | --- | --- | ---: | ---: | ---: |
@@ -145,8 +158,9 @@ between the two policies, and it favours the rule.
   --sweep both --output runs/scale_final
 ```
 
-Artifacts: `runs/scale_v4_filtered` (real catalog), `runs/shell_probe` (projected
-shell, no-op reference) and `runs/shell_pairs` (projected shell, all policies). Run on an NVIDIA GB10 Grace Blackwell node, 20 Arm cores, Python 3.11.16.
+Artifacts: `runs/scale_v4_filtered` (real catalog), `runs/scale_collinear` (real
+catalog with both classical baselines), `runs/shell_probe` (projected shell, no-op
+reference) and `runs/shell_pairs` (projected shell, all policies). Run on an NVIDIA GB10 Grace Blackwell node, 20 Arm cores, Python 3.11.16.
 
 ## Limitations
 
@@ -154,6 +168,10 @@ shell, no-op reference) and `runs/shell_pairs` (projected shell, all policies). 
   the encounters it produces. There are no error bars on a conjunction count, so
   differences of one to three conjunctions cannot be resolved.
 - **Six hours.** A longer horizon would raise the counts and tighten the comparison.
+- **No held-out split.** The sweep draws agents from the whole catalog, so it includes
+  satellites the policy trained against. The generated benchmark splits satellites
+  80/20 by hashed identifier and is the clean generalisation test; this sweep measures
+  behaviour and cost at population.
 - **Synthetic density.** The projected shell keeps each template's inclination,
   eccentricity and mean motion and varies only plane and phase. It emulates a denser
   population, not any specific planned constellation.

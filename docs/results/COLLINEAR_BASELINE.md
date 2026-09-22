@@ -44,6 +44,42 @@ that penalty, which is why the unrestricted rule is both safer and cheaper overa
 Against this baseline the actor is therefore **53% safer and 26% cheaper** in total
 delta-v — it is not on the wrong side of a safety-fuel trade at all.
 
+## At catalog scale
+
+The same three policies on the real catalog, 19,984 objects over six hours
+([SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md)):
+
+| Agents | No-op | Collinear | Rule | Actor |
+| ---: | ---: | ---: | ---: | ---: |
+| 1,000 | 26 | 4 (84.6%) | **1 (96.2%)** | **1 (96.2%)** |
+| 2,000 | 41 | 4 (90.2%) | **1 (97.6%)** | **1 (97.6%)** |
+| 5,000 | 79 | 7 (91.1%) | **2 (97.5%)** | 3 (96.2%) |
+| 10,000 | 118 | 10 (91.5%) | **5 (95.8%)** | 8 (93.2%) |
+
+Collinear leaves the most conjunctions unresolved at every size. The rule is best on
+real catalog conjunctions, which are almost all isolated and therefore the case it is
+near-optimal for.
+
+### The along-track penalty, isolated
+
+At 10,000 agents:
+
+| Policy | Maneuvers | Slot drift (m) | Avoidance delta-v | Return | **Total** |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Collinear | 217 | **355** | 0.0109 | 0.0370 | **0.0479** |
+| Rule | 185 | **125** | **0.0093** | 0.0161 | **0.0254** |
+| Actor | **336** | 161 | 0.0168 | 0.0207 | **0.0375** |
+
+The actor makes 55% more burns than the collinear heuristic and drifts less than half
+as far, because radial and cross-track separations do not change the orbital period
+and along-track burns do. Collinear's drift is 2.8 times the rule's here, against 1.9
+times at 150 agents, so the penalty grows with population.
+
+Against the collinear heuristic the actor is therefore 20% safer and 22% cheaper in
+total delta-v at 10,000 agents, the same direction as the 53% and 26% measured on the
+benchmark. The margins are smaller because real catalog conjunctions are rarer and
+develop more slowly than the generated ones.
+
 ## Why both classical baselines are reported
 
 `collinear` is the strategy the methodology names, and it is the weaker comparison.
@@ -64,4 +100,6 @@ threats overlap ([MULTITHREAT_BENCHMARK.md](MULTITHREAT_BENCHMARK.md)).
   along-track axis, which is what makes it collinear.
 - **Same trigger as the rule.** Both act when the curved-orbit predicted miss is at or
   inside the 1 km safe separation, so the comparison isolates the choice of direction.
-- **One scenario seed per benchmark**, 20 episodes each.
+- **One scenario seed per benchmark**, 20 episodes each, and one draw per sweep point.
+- **Absolute drift is small at catalog scale** because few of the 10,000 agents ever
+  maneuver; the ratios between policies are the comparable quantity, not the metres.
