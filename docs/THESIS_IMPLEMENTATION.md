@@ -93,7 +93,9 @@ weights and exploration settings used by the curriculum, and
 repeat, and its evaluation against the no-op and rule-based baselines.
 [Multi-threat benchmark](MULTITHREAT_BENCHMARK.md) measures where the actor beats the
 rule and by how much; [scalability results](SCALABILITY_RESULTS.md) measure how often
-that situation occurs, the per-agent cost to 10,000 agents, and the fuel penalty.
+that situation occurs, the per-agent cost to 10,000 agents, and the fuel penalty;
+[fuel trade-off](FUEL_TRADEOFF.md) retrains the curriculum at four delta-v penalties
+and shows the margin depends on the burns a cheaper policy stops making.
 
 The actor now receives fixed-width, threat-ranked local observations containing
 `k` relative-neighbour blocks with explicit padding masks. The critic receives

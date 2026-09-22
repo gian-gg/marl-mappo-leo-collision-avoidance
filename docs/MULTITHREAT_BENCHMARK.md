@@ -82,6 +82,20 @@ choice of direction that tolerates a threat it cannot see.
 The fuel penalty is steady across the ladder and matches the figure measured
 elsewhere; it does not grow as the benefit grows.
 
+## Fuel variants under stress
+
+Raising `delta_v_penalty_per_mps` removes the margin
+([FUEL_TRADEOFF.md](FUEL_TRADEOFF.md)):
+
+| Penalty | Close approaches | Margin over the rule |
+| ---: | ---: | ---: |
+| 1.0 (adopted) | 21.90 | **+7.6 pt** |
+| 2.0 | 24.85 | +5.6 pt |
+| 4.0 | 30.45 | +1.8 pt |
+| 8.0 | 80.90 | −32.2 pt |
+
+The margin depends on burns the cheaper-fuel policies stop making.
+
 ## How often this regime occurs
 
 Simultaneous multi-threat is rare in LEO today. In the real catalog at 10,000
