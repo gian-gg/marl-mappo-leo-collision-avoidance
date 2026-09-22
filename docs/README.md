@@ -28,6 +28,9 @@ measured. Most methods have a matching results document.
 
 ## Results — what was measured
 
+[results/README.md](results/README.md) summarises every outcome and states what is not
+claimed.
+
 | Document | Question it answers |
 | --- | --- |
 | [K_DT_RESULTS.md](results/K_DT_RESULTS.md) | how many neighbours, and how often to decide |

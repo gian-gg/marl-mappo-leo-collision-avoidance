@@ -43,7 +43,7 @@ repository layout and current status.
 | --- | --- |
 | [design/](docs/design/) | how the environment, policy and scenarios work |
 | [methods/](docs/methods/) | how to run training, evaluation, calibration and the scale sweeps |
-| [results/](docs/results/) | what each study measured |
+| [results/](docs/results/README.md) | what each study measured, with a summary |
 
 ## Built on OrbitZoo
 
