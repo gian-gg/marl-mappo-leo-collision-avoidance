@@ -14,12 +14,6 @@ this thesis's own work is auditable.
 
 The baseline tree holds 66 files. This repository tracks 194.
 
-## Licence status
-
-**Unresolved.** OrbitZoo ships no licence file, so no redistribution terms have been
-granted and the default is all rights reserved. Settle this with the OrbitZoo authors
-before publishing or redistributing this repository.
-
 ## Carried verbatim from upstream
 
 These 56 files are byte-identical to the baseline commit. None of this is the author's
