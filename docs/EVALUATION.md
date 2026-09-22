@@ -45,7 +45,8 @@ predicted geometry, but radial and cross-track separations are unavailable to it
 
 `rule` is the stronger comparison, since it evaluates all six directions and is close
 to optimal for an isolated conjunction. Reporting both separates beating a traditional
-heuristic from beating a near-optimal one.
+heuristic from beating a near-optimal one. Measured results are in
+[COLLINEAR_BASELINE.md](COLLINEAR_BASELINE.md).
 
 The rule uses the same information as the trained actor, so it answers whether
 learning adds anything beyond a physics-aware single-threat heuristic.

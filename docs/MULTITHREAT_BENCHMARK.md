@@ -82,6 +82,12 @@ choice of direction that tolerates a threat it cannot see.
 The fuel penalty is steady across the ladder and matches the figure measured
 elsewhere; it does not grow as the benefit grows.
 
+## Against the collinear heuristic
+
+At 100% double threats the traditional along-track baseline resolves 69.0% against the
+actor's 85.2%, losing all 20 episodes (p = 0.00009), and spends more total delta-v
+doing it. See [COLLINEAR_BASELINE.md](COLLINEAR_BASELINE.md).
+
 ## Fuel variants under stress
 
 Raising `delta_v_penalty_per_mps` removes the margin

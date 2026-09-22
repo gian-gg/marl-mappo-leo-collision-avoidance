@@ -16,13 +16,19 @@ the training curriculum, and the evaluation and scalability suites, all under
 
 At 150 agents on held-out scenarios, against a physics-based rule baseline:
 
-| Metric | Coasting | Rule | Policy |
-| --- | ---: | ---: | ---: |
-| Close approaches per episode | 101.20 | 10.40 | **7.45** |
-| Conjunctions resolved | — | 89.7% | **92.6%** |
-| Closest approach (m) | 40.6 | 206.9 | **249.6** |
-| Collisions | 0 | 0 | 0 |
-| Delta-v incl. return (m/s) | 0.00 | **1.40** | 1.76 |
+| Metric | Coasting | Collinear heuristic | Rule | Policy |
+| --- | ---: | ---: | ---: | ---: |
+| Close approaches per episode | 101.20 | 15.80 | 10.40 | **7.45** |
+| Conjunctions resolved | — | 84.4% | 89.7% | **92.6%** |
+| Closest approach (m) | 40.6 | 189.1 | 206.9 | **249.6** |
+| Collisions | 0 | 0 | 0 | 0 |
+| Delta-v incl. return (m/s) | 0.00 | 2.39 | **1.40** | 1.76 |
+
+Two classical baselines: the collinear heuristic thrusts along the orbital track, the
+rule searches all six directions and is close to optimal for an isolated conjunction.
+The policy resolves 53% more conjunctions than the heuristic for 26% less total
+delta-v, and 2.9 points more than the rule at 26% more delta-v
+([COLLINEAR_BASELINE.md](docs/COLLINEAR_BASELINE.md)).
 
 Retraining from scratch with a different seed gives 7.05, so the result reproduces.
 
