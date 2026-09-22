@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Protocol
+from typing import Protocol, Sequence
 
 import numpy as np
 
@@ -20,6 +20,8 @@ from orbitzoo.thesis.environments.vectorized_observations import rsw_bases
 from orbitzoo.thesis.maneuvers.actions import ManeuverAction
 from orbitzoo.thesis.maneuvers.contract import ManeuverConfig
 from orbitzoo.thesis.maneuvers.sizing import BURN_ACTIONS, EncounterGeometry, miss_displacement_per_mps
+
+COLLINEAR_ACTIONS = (ManeuverAction.PROGRADE, ManeuverAction.RETROGRADE)
 
 
 class EvaluationPolicy(Protocol):
@@ -42,15 +44,24 @@ class NoOpPolicy:
 class ClohessyWiltshireAvoidancePolicy:
     """Burns only when the top-ranked threat is predicted unsafe, choosing the burn that most widens its miss.
 
+    With ``candidate_actions`` restricted to the along-track pair this is the heuristic collinear
+    maneuver: a fixed burn along the orbital track whenever a conjunction crosses the threshold.
+
     The miss is predicted along curved J2 orbits reconstructed from the agent's own observation, and each
     burn's effect is the Clohessy–Wiltshire displacement across the relative velocity, as in the sizing study.
     """
 
-    name = "rule"
-
-    def __init__(self, maneuver_config: ManeuverConfig, safety_config: SafetyConfig) -> None:
+    def __init__(
+        self,
+        maneuver_config: ManeuverConfig,
+        safety_config: SafetyConfig,
+        candidate_actions: Sequence[ManeuverAction] = BURN_ACTIONS,
+        name: str = "rule",
+    ) -> None:
         self.delta_v = maneuver_config.commanded_delta_v_mps
         self.safety_config = safety_config
+        self.candidate_actions = tuple(candidate_actions)
+        self.name = name
 
     def choose(self, local_observations: np.ndarray) -> np.ndarray:
         actions = np.zeros(local_observations.shape[0], dtype=np.int64)
@@ -83,7 +94,7 @@ class ClohessyWiltshireAvoidancePolicy:
                 agent_velocity_mps=approach.first_velocities_mps[index],
             )
             best_action, best_miss = ManeuverAction.NO_OP, encounter.miss_distance_m
-            for action in BURN_ACTIONS:
+            for action in self.candidate_actions:
                 gain = miss_displacement_per_mps(encounter, action, [float(approach.time_seconds[index])])
                 miss = float(np.linalg.norm(encounter.miss_vector_m + self.delta_v * gain))
                 if miss > best_miss:
@@ -109,6 +120,10 @@ def build_policy(spec: str, config: ExperimentConfig, local_observation_dim: int
         return NoOpPolicy()
     if spec == "rule":
         return ClohessyWiltshireAvoidancePolicy(config.maneuver, config.safety)
+    if spec == "collinear":
+        return ClohessyWiltshireAvoidancePolicy(
+            config.maneuver, config.safety, COLLINEAR_ACTIONS, "collinear"
+        )
     name, _, path = spec.rpartition("=")
     checkpoint = Path(path).expanduser()
     if not checkpoint.is_file():

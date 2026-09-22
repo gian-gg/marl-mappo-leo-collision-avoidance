@@ -17,7 +17,8 @@ Without `--policy`, the no-op and rule-based baselines are compared.
 | Spec | Policy |
 | --- | --- |
 | `noop` | Never maneuvers. The lower bound every result is compared against. |
-| `rule` | Rule-based Clohessy–Wiltshire avoidance (below). |
+| `rule` | Rule-based Clohessy–Wiltshire avoidance, all six burn directions (below). |
+| `collinear` | The heuristic collinear maneuver: the same trigger, along-track burns only. |
 | `PATH` or `NAME=PATH` | A trained MAPPO checkpoint, run deterministically (most likely action). |
 
 ### Rule-based baseline
@@ -33,6 +34,18 @@ Otherwise it coasts.
 
 On 20 held-out stage-1 scenarios it cut real close approaches from 8.55 to 0.45 per
 episode (95%) using 0.53 m/s per agent, consistent with the sizing study.
+
+### Heuristic collinear baseline
+
+`collinear` is the same policy with its candidate burns restricted to the along-track
+pair, prograde and retrograde. It is the traditional strategy of thrusting along the
+orbital track once a conjunction crosses the risk threshold, and it is the weaker of
+the two classical baselines: the choice of which way along the track still follows the
+predicted geometry, but radial and cross-track separations are unavailable to it.
+
+`rule` is the stronger comparison, since it evaluates all six directions and is close
+to optimal for an isolated conjunction. Reporting both separates beating a traditional
+heuristic from beating a near-optimal one.
 
 The rule uses the same information as the trained actor, so it answers whether
 learning adds anything beyond a physics-aware single-threat heuristic.

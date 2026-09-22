@@ -226,3 +226,14 @@ def test_evaluate_command_prints_a_summary(tmp_path: Path, capsys) -> None:
 
     output = capsys.readouterr().out
     assert "noop" in output and "rule" in output
+
+
+def test_collinear_policy_only_burns_along_track() -> None:
+    """The paper's heuristic baseline thrusts along the orbital track, never radially or cross-track."""
+    policy = build_policy("collinear", ExperimentConfig.load(SMOKE_CONFIG), 22)
+    observation = crossing_observation([300.0, 0.0, 0.0])
+
+    chosen = ManeuverAction(policy.choose(observation)[0])
+
+    assert chosen in (ManeuverAction.PROGRADE, ManeuverAction.RETROGRADE)
+    assert policy.name == "collinear"
