@@ -23,7 +23,7 @@ def default_maneuver_config() -> ManeuverConfig:
     )
 
 
-NEIGHBOR_SELECTIONS = ("ranked", "radius")
+NEIGHBOR_SELECTIONS = ("ranked", "radius", "global")
 
 
 @dataclass(frozen=True)

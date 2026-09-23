@@ -201,3 +201,21 @@ def test_radius_selection_pads_when_nothing_is_in_range() -> None:
     observation = encoder.encode(bodies, ["agent"]).local_observations[0]
 
     assert np.all(observation[OWN_FEATURE_DIM:] == 0.0)
+
+
+def test_global_selection_gives_every_agent_the_same_state_with_its_own_features() -> None:
+    """The ablation removes locality: each agent sees itself plus the whole constellation."""
+    config = SafetyConfig(safe_separation_meters=1_000.0, screening_horizon_seconds=1_800.0, threat_prediction="linear")
+    encoder = LocalObservationEncoder(1, config, "global")
+
+    assert encoder.observation_dim(300) == OWN_FEATURE_DIM + GLOBAL_BODY_FEATURE_DIM * 300
+    assert encoder.observation_dim(20_000) == OWN_FEATURE_DIM + GLOBAL_BODY_FEATURE_DIM * 20_000
+    with pytest.raises(ValueError, match="size with the population"):
+        _ = encoder.local_observation_dim
+
+
+def test_local_selection_width_does_not_depend_on_population() -> None:
+    config = SafetyConfig(safe_separation_meters=1_000.0, screening_horizon_seconds=1_800.0, threat_prediction="linear")
+    encoder = LocalObservationEncoder(1, config)
+
+    assert encoder.observation_dim(300) == encoder.observation_dim(20_000) == OWN_FEATURE_DIM + NEIGHBOR_FEATURE_DIM

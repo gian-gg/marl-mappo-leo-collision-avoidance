@@ -78,8 +78,8 @@ class LocalObservationEncoder:
     ) -> None:
         if neighborhood_size <= 0:
             raise ValueError("neighborhood_size must be positive")
-        if selection not in ("ranked", "radius"):
-            raise ValueError("selection must be 'ranked' or 'radius'")
+        if selection not in ("ranked", "radius", "global"):
+            raise ValueError("selection must be 'ranked', 'radius' or 'global'")
         safety_config.validate()
         self.neighborhood_size = neighborhood_size
         self.safety_config = safety_config
@@ -88,6 +88,14 @@ class LocalObservationEncoder:
 
     @property
     def local_observation_dim(self) -> int:
+        if self.selection == "global":
+            raise ValueError("global observations size with the population; use observation_dim")
+        return OWN_FEATURE_DIM + self.neighborhood_size * NEIGHBOR_FEATURE_DIM
+
+    def observation_dim(self, num_bodies: int) -> int:
+        """Actor input width. Fixed for local selection, population-sized for ``global``."""
+        if self.selection == "global":
+            return OWN_FEATURE_DIM + self.global_state_dim(num_bodies)
         return OWN_FEATURE_DIM + self.neighborhood_size * NEIGHBOR_FEATURE_DIM
 
     @staticmethod

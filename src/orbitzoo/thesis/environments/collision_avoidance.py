@@ -18,6 +18,7 @@ from orbitzoo.thesis.environments.diagnostics import EpisodeDiagnostics
 from orbitzoo.thesis.environments.observations import LocalObservationEncoder, fuel_fraction
 from orbitzoo.thesis.environments.rewards import RewardConfig, calculate_rewards, threat_potentials
 from orbitzoo.thesis.environments.safety import PairSafetyAssessment, SafetyConfig, SafetySnapshot, safety_snapshot
+from orbitzoo.thesis.environments.observations import POSITION_SCALE_METERS, VELOCITY_SCALE_MPS
 from orbitzoo.thesis.environments.vectorized_observations import CatalogState, encode_local_observations
 from orbitzoo.thesis.evaluation.drift import SlotDeviation, slot_deviation
 from orbitzoo.thesis.maneuvers.actions import ManeuverAction
@@ -90,7 +91,7 @@ class CollisionAvoidanceEnv(OrbitZoo):
 
     @property
     def local_observation_dim(self) -> int:
-        return self.observation_encoder.local_observation_dim
+        return self.observation_encoder.observation_dim(len(self._moving_bodies()))
 
     @property
     def global_state_dim(self) -> int:
@@ -114,14 +115,28 @@ class CollisionAvoidanceEnv(OrbitZoo):
             fuel_fractions=np.asarray([fuel_fraction(body, agents) for body in bodies]),
         )
         global_state = self.observation_encoder.global_state(bodies, self.agent_names)
-        local = encode_local_observations(
-            catalog,
-            np.asarray([index[name] for name in self.agent_names], dtype=np.intp),
-            self.observation_encoder.neighborhood_size,
-            self.safety_config,
-            selection=self.observation_encoder.selection,
-            radius_meters=self.observation_encoder.radius_meters,
-        )
+        agent_rows = np.asarray([index[name] for name in self.agent_names], dtype=np.intp)
+        if self.observation_encoder.selection == "global":
+            own = np.concatenate(
+                (
+                    catalog.positions[agent_rows] / POSITION_SCALE_METERS,
+                    catalog.velocities[agent_rows] / VELOCITY_SCALE_MPS,
+                    catalog.fuel_fractions[agent_rows][:, np.newaxis],
+                ),
+                axis=1,
+            ).astype(np.float32)
+            local = np.concatenate(
+                (own, np.broadcast_to(global_state, (own.shape[0], global_state.size))), axis=1
+            )
+        else:
+            local = encode_local_observations(
+                catalog,
+                agent_rows,
+                self.observation_encoder.neighborhood_size,
+                self.safety_config,
+                selection=self.observation_encoder.selection,
+                radius_meters=self.observation_encoder.radius_meters,
+            )
         self._last_local = local
         return local, global_state
 
