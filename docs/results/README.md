@@ -23,6 +23,7 @@ return to the nominal slot is counted. No policy caused a collision in any run.
 
 | Study | Finding |
 | --- | --- |
+| [BASELINES.md](BASELINES.md) | The three policies the methodology names, on every benchmark: the actor is 53% safer and 26% cheaper than the collinear heuristic, and 20% and 22% at 10,000 agents. |
 | [K_DT_RESULTS.md](K_DT_RESULTS.md) | One ranked neighbour and a 120 s decision interval suffice, chosen on a 20,000-object, 72-hour run. |
 | [MANEUVER_SIZING_RESULTS.md](MANEUVER_SIZING_RESULTS.md) | 0.5 m/s at 7 N clears 95% of reference conjunctions; the action size follows from measured warning times. |
 | [TRAINING_TRIALS.md](TRAINING_TRIALS.md) | Ten settings experiments. The reward shaping must preview the penalties it stands in for, and the entropy bonus that rescues early training later causes burns fired at nothing. |

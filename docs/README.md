@@ -33,6 +33,7 @@ claimed.
 
 | Document | Question it answers |
 | --- | --- |
+| [BASELINES.md](results/BASELINES.md) | the three policies the methodology names, on every benchmark |
 | [K_DT_RESULTS.md](results/K_DT_RESULTS.md) | how many neighbours, and how often to decide |
 | [MANEUVER_SIZING_RESULTS.md](results/MANEUVER_SIZING_RESULTS.md) | how large one maneuver should be |
 | [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md) | every settings experiment and its evidence |
