@@ -26,6 +26,8 @@ def _make_environment(config: ExperimentConfig, orbitzoo_kwargs: dict[str, Any])
         safety_config=config.safety,
         reward_config=config.rewards,
         neighborhood_size=environment.neighborhood_size,
+        neighbor_selection=environment.neighbor_selection,
+        neighbor_radius_meters=environment.neighbor_radius_meters,
         decision_interval_seconds=environment.decision_interval_seconds,
         episode_horizon=environment.episode_horizon,
         **orbitzoo_kwargs,

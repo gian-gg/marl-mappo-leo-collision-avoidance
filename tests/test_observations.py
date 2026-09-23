@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
 import numpy as np
+import pytest
 
 from orbitzoo.thesis.environments.observations import (
     GLOBAL_BODY_FEATURE_DIM,
     NEIGHBOR_FEATURE_DIM,
     OWN_FEATURE_DIM,
+    POSITION_SCALE_METERS,
     LocalObservationEncoder,
 )
 from orbitzoo.thesis.environments.safety import SafetyConfig, assess_all_pairs
@@ -166,3 +168,36 @@ def test_miss_direction_keeps_full_magnitude_for_a_very_close_conjunction() -> N
 
     assert np.allclose(direction(30.0), direction(300.0), atol=1e-6)
     assert np.allclose(direction(-300.0), -direction(300.0), atol=1e-6)
+
+
+def test_radius_selection_takes_the_nearest_objects_in_range() -> None:
+    """The fixed-radius ablation selects by present separation, not predicted threat."""
+    config = SafetyConfig(safe_separation_meters=1_000.0, screening_horizon_seconds=1_800.0, threat_prediction="linear")
+    bodies = [
+        body("agent", [7_000_000, 0, 0], [0, 7_500, 0], fuel=1, initial_fuel=1),
+        body("near", [7_000_000 + 50_000, 0, 0], [0, 7_500, 0]),
+        body("far", [7_000_000 + 900_000, 0, 0], [0, 7_500, 0]),
+        body("outside", [7_000_000 + 3_000_000, 0, 0], [0, 7_500, 0]),
+    ]
+    encoder = LocalObservationEncoder(2, config, "radius", 1_000_000.0)
+
+    observation = encoder.encode(bodies, ["agent"]).local_observations[0]
+
+    first = observation[OWN_FEATURE_DIM : OWN_FEATURE_DIM + NEIGHBOR_FEATURE_DIM]
+    second = observation[OWN_FEATURE_DIM + NEIGHBOR_FEATURE_DIM :]
+    assert first[0] * POSITION_SCALE_METERS == pytest.approx(50_000, rel=1e-3)
+    assert second[0] * POSITION_SCALE_METERS == pytest.approx(900_000, rel=1e-3)
+    assert first[11] == 1.0 and second[11] == 1.0
+
+
+def test_radius_selection_pads_when_nothing_is_in_range() -> None:
+    config = SafetyConfig(safe_separation_meters=1_000.0, screening_horizon_seconds=1_800.0, threat_prediction="linear")
+    bodies = [
+        body("agent", [7_000_000, 0, 0], [0, 7_500, 0], fuel=1, initial_fuel=1),
+        body("distant", [7_000_000 + 5_000_000, 0, 0], [0, 7_500, 0]),
+    ]
+    encoder = LocalObservationEncoder(2, config, "radius", 1_000_000.0)
+
+    observation = encoder.encode(bodies, ["agent"]).local_observations[0]
+
+    assert np.all(observation[OWN_FEATURE_DIM:] == 0.0)

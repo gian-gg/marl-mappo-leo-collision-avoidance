@@ -63,8 +63,10 @@ def ranked_batches(
     retained: int,
     safety: SafetyConfig,
     agent_batch_size: int = DEFAULT_AGENT_BATCH_SIZE,
+    selection: str = "ranked",
+    radius_meters: float = 1_000_000.0,
 ) -> Iterator[RankedBatch]:
-    """Rank every object for each agent with the training encoder's threat order."""
+    """Select each agent's neighbours, by threat rank or by present separation."""
     horizon = safety.screening_horizon_seconds
     object_order = np.arange(state.positions.shape[0])
     for start in range(0, agent_indices.size, agent_batch_size):
@@ -87,28 +89,41 @@ def ranked_batches(
         miss[rows, batch] = np.inf
         tca[rows, batch] = np.inf
 
-        # Monotone scalar key for (collision, unsafe, miss); exact ties are re-sorted below.
-        priority = (not_collision.astype(np.float64) * 2 + not_unsafe) * 1e12 + miss
-        priority[rows, batch] = np.inf
-        cutoff = np.partition(priority, retained - 1, axis=1)[:, retained - 1]
         neighbors = []
-        for row in rows:
-            candidates = np.flatnonzero(priority[row] <= cutoff[row])
-            order = np.lexsort(
-                (
-                    object_order[candidates],
-                    tca[row, candidates],
-                    miss[row, candidates],
-                    not_unsafe[row, candidates],
-                    not_collision[row, candidates],
+        if selection == "radius":
+            in_range = separations.copy()
+            in_range[rows, batch] = np.inf
+            for row in rows:
+                candidates = np.flatnonzero(in_range[row] <= radius_meters)
+                order = np.lexsort((object_order[candidates], in_range[row, candidates]))
+                neighbors.append(candidates[order[:retained]])
+        else:
+            # Monotone scalar key for (collision, unsafe, miss); exact ties are re-sorted below.
+            priority = (not_collision.astype(np.float64) * 2 + not_unsafe) * 1e12 + miss
+            priority[rows, batch] = np.inf
+            cutoff = np.partition(priority, retained - 1, axis=1)[:, retained - 1]
+            for row in rows:
+                candidates = np.flatnonzero(priority[row] <= cutoff[row])
+                order = np.lexsort(
+                    (
+                        object_order[candidates],
+                        tca[row, candidates],
+                        miss[row, candidates],
+                        not_unsafe[row, candidates],
+                        not_collision[row, candidates],
+                    )
                 )
-            )
-            neighbors.append(candidates[order[:retained]])
+                neighbors.append(candidates[order[:retained]])
         yield RankedBatch(start, relative_positions, relative_velocities, tca, miss, combined_radii, neighbors)
 
 
 def top_neighbors(
-    state: CatalogState, agent_indices: np.ndarray, neighborhood_size: int, safety: SafetyConfig
+    state: CatalogState,
+    agent_indices: np.ndarray,
+    neighborhood_size: int,
+    safety: SafetyConfig,
+    selection: str = "ranked",
+    radius_meters: float = 1_000_000.0,
 ) -> np.ndarray:
     """Indices of each agent's top-``k`` ranked neighbours, padded with -1."""
     agent_indices = np.asarray(agent_indices, dtype=np.intp)
@@ -116,7 +131,9 @@ def top_neighbors(
     retained = min(neighborhood_size, state.positions.shape[0] - 1)
     if retained <= 0:
         return result
-    for ranked in ranked_batches(state, agent_indices, retained, safety):
+    for ranked in ranked_batches(
+        state, agent_indices, retained, safety, selection=selection, radius_meters=radius_meters
+    ):
         for row, neighbors in enumerate(ranked.neighbors):
             result[ranked.start + row, : neighbors.size] = neighbors
     return result
@@ -129,8 +146,10 @@ def encode_local_observations(
     safety: SafetyConfig,
     *,
     agent_batch_size: int = DEFAULT_AGENT_BATCH_SIZE,
+    selection: str = "ranked",
+    radius_meters: float = 1_000_000.0,
 ) -> np.ndarray:
-    """Rank every catalog object for each agent and encode its top-``k`` threats."""
+    """Select each agent's neighbours and encode them into fixed-width rows."""
     agent_indices = np.asarray(agent_indices, dtype=np.intp)
     object_count = state.positions.shape[0]
     retained = min(neighborhood_size, object_count - 1)
@@ -146,7 +165,9 @@ def encode_local_observations(
     safe_separation = safety.safe_separation_meters
     bases = rsw_bases(state.positions[agent_indices], state.velocities[agent_indices])
     chosen: list[tuple[int, int, int]] = []
-    for ranked in ranked_batches(state, agent_indices, retained, safety, agent_batch_size):
+    for ranked in ranked_batches(
+        state, agent_indices, retained, safety, agent_batch_size, selection, radius_meters
+    ):
         for row, neighbors in enumerate(ranked.neighbors):
             basis = bases[ranked.start + row]
             for slot, neighbor in enumerate(neighbors):

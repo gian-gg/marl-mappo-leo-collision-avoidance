@@ -23,12 +23,17 @@ def default_maneuver_config() -> ManeuverConfig:
     )
 
 
+NEIGHBOR_SELECTIONS = ("ranked", "radius")
+
+
 @dataclass(frozen=True)
 class EnvironmentConfig:
     """Parameters that define one simulation environment."""
 
     num_agents: int = 16
     neighborhood_size: int = 1
+    neighbor_selection: str = "ranked"
+    neighbor_radius_meters: float = 1_000_000.0
     decision_interval_seconds: float = 120.0
     episode_horizon: int = 100
     scenario: str = "development"
@@ -40,6 +45,10 @@ class EnvironmentConfig:
             raise ValueError("num_agents must be at least 2")
         if self.neighborhood_size <= 0:
             raise ValueError("neighborhood_size must be positive")
+        if self.neighbor_selection not in NEIGHBOR_SELECTIONS:
+            raise ValueError(f"neighbor_selection must be one of {NEIGHBOR_SELECTIONS}")
+        if self.neighbor_radius_meters <= 0:
+            raise ValueError("neighbor_radius_meters must be positive")
         if self.decision_interval_seconds <= 0:
             raise ValueError("decision_interval_seconds must be positive")
         if self.episode_horizon <= 0:

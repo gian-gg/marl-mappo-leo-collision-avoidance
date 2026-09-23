@@ -46,6 +46,8 @@ class CollisionAvoidanceEnv(OrbitZoo):
         safety_config: SafetyConfig | None = None,
         reward_config: RewardConfig | None = None,
         neighborhood_size: int = 1,
+        neighbor_selection: str = "ranked",
+        neighbor_radius_meters: float = 1_000_000.0,
         decision_interval_seconds: float = 120.0,
         episode_horizon: int = 100,
         **orbitzoo_kwargs: Any,
@@ -66,7 +68,7 @@ class CollisionAvoidanceEnv(OrbitZoo):
         self.safety_config.validate()
         self.reward_config.validate()
         self.observation_encoder = LocalObservationEncoder(
-            neighborhood_size, self.safety_config
+            neighborhood_size, self.safety_config, neighbor_selection, neighbor_radius_meters
         )
         self.episode_horizon = episode_horizon
         self.agent_names: list[str] = []
@@ -117,6 +119,8 @@ class CollisionAvoidanceEnv(OrbitZoo):
             np.asarray([index[name] for name in self.agent_names], dtype=np.intp),
             self.observation_encoder.neighborhood_size,
             self.safety_config,
+            selection=self.observation_encoder.selection,
+            radius_meters=self.observation_encoder.radius_meters,
         )
         self._last_local = local
         return local, global_state

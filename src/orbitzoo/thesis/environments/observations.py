@@ -69,12 +69,22 @@ def _rsw_basis(body: Any) -> np.ndarray:
 class LocalObservationEncoder:
     """Encode a variable population into fixed-width shared-actor inputs."""
 
-    def __init__(self, neighborhood_size: int, safety_config: SafetyConfig) -> None:
+    def __init__(
+        self,
+        neighborhood_size: int,
+        safety_config: SafetyConfig,
+        selection: str = "ranked",
+        radius_meters: float = 1_000_000.0,
+    ) -> None:
         if neighborhood_size <= 0:
             raise ValueError("neighborhood_size must be positive")
+        if selection not in ("ranked", "radius"):
+            raise ValueError("selection must be 'ranked' or 'radius'")
         safety_config.validate()
         self.neighborhood_size = neighborhood_size
         self.safety_config = safety_config
+        self.selection = selection
+        self.radius_meters = radius_meters
 
     @property
     def local_observation_dim(self) -> int:
@@ -202,13 +212,20 @@ class LocalObservationEncoder:
                 if pair not in assessment_by_pair:
                     raise ValueError(f"missing safety assessment for pair {tuple(sorted(pair))}")
                 assessment = assessment_by_pair[pair]
-                ranked_neighbors.append(
-                    (
-                        self._relevance_key(assessment, body_indices[neighbor.name]),
-                        neighbor,
-                        assessment,
+                index = body_indices[neighbor.name]
+                if self.selection == "radius":
+                    separation = float(
+                        np.linalg.norm(
+                            np.asarray(neighbor.position, dtype=float)
+                            - np.asarray(observer.position, dtype=float)
+                        )
                     )
-                )
+                    if separation > self.radius_meters:
+                        continue
+                    key = (True, True, separation, 0.0, index)
+                else:
+                    key = self._relevance_key(assessment, index)
+                ranked_neighbors.append((key, neighbor, assessment))
             ranked_neighbors.sort(key=lambda item: item[0])
 
             blocks = [
