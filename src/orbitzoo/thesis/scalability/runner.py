@@ -282,6 +282,8 @@ def run_scalability(
         dry_mass_kg=config.dry_mass_kg,
         initial_fuel_mass_kg=config.initial_fuel_mass_kg,
         maximum_relative_speed_mps=config.maximum_relative_speed_mps,
+        neighbor_selection=experiment.environment.neighbor_selection or "ranked",
+        neighbor_radius_meters=experiment.environment.neighbor_radius_meters or 1_000_000.0,
     )
     settings.validate()
 

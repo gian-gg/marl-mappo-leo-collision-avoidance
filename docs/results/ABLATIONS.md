@@ -74,6 +74,15 @@ a third of control's fuel doing it.
 This is not an information deficit. The ablation carries **four** neighbour slots to
 control's one, so its actor sees 67 inputs against 22. It has more of the wrong thing.
 
+A radius-based variant still needs a slot count, because the actor is a fixed-width
+network and "every object within 1,000 km" is a varying number. The four nearest
+in-range objects fill the slots and the rest are dropped; fewer than four in range
+zero-pads. Four is taken from the calibration grid, which swept `k = 1, 2, 4, 8, 16`
+and found one ranked neighbour sufficient — so the ablation runs at a slot budget that
+study already showed to be more than enough for the threat-ranked selector. The cap
+rarely binds in any case, since the object that matters is usually outside the sphere
+entirely.
+
 The cause is geometric. Across 750 agent-samples from five held-out episodes, the
 object that the threat ranking selects is a median of **4,457 km away**, and is the
 *nearest* object only 5.9% of the time. Its median rank by proximity is 29th.

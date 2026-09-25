@@ -42,6 +42,71 @@ The actor's own inference is about 2% of that cost. At 10,000 agents the policy 
 in 8.839 s per decision against the no-op reference's 8.944 s — within noise of doing
 nothing at all.
 
+## The fixed-radius variant scales, costs more, and resolves almost nothing
+
+The radius ablation was swept over the same catalog and agent ladders, with its own
+no-op reference (`configs/scalability_radius.json`, `k = 4`, 1,000 km).
+
+| Agents | Conjunctions | Radius resolves | v4 resolves |
+| ---: | ---: | ---: | ---: |
+| 1,000 | 26 | 5 (19.2%) | **25 (96.2%)** |
+| 2,000 | 41 | 6 (14.6%) | **40 (97.6%)** |
+| 5,000 | 79 | 11 (13.9%) | **76 (96.2%)** |
+| 10,000 | 118 | 15 (12.7%) | **111 (94.1%)** |
+
+19,984 objects, 6 hours. Across the catalog sweep at 349 maneuvering satellites the
+radius variant resolves **zero** conjunctions at every size while still spending
+delta-v, where v4 resolves all of them.
+
+The benchmark result therefore holds at catalog scale: proximity selection resolves
+roughly an eighth of what threat ranking resolves, and the share falls as the
+constellation grows.
+
+### It is 1.7 times more expensive per decision
+
+| Agents | v4, `k = 1` | Radius, `k = 4` | Ratio |
+| ---: | ---: | ---: | ---: |
+| 1,000 | 1.004 s | 1.694 s | 1.69 |
+| 2,000 | 1.863 s | 3.041 s | 1.63 |
+| 5,000 | 4.402 s | 7.521 s | 1.71 |
+| 10,000 | 8.687 s | 15.172 s | **1.75** |
+
+The cost is the encoder, not the policy: the no-op rows carry the same ratio, 8.703 s
+against 14.952 s at 10,000 agents, because both sweeps encode observations before any
+policy is consulted. Per-agent observation cost is 849 µs at `k = 1` and 1,484 µs at
+`k = 4`.
+
+Four slots cost 1.7 times one slot rather than four times, because the pairwise
+screening that precedes selection is shared across slots and does not depend on `k`.
+The extra cost is the per-neighbour encoding alone.
+
+### Scalability is not what this ablation refutes
+
+Per-agent observation cost is flat across the ladder — 1,456, 1,397, 1,444, 1,484 µs
+from 1,000 to 10,000 agents — so the radius variant scales as well as the adopted
+policy does. Any fixed-size neighbourhood does, whichever rule fills it.
+
+The fixed-radius ablation therefore does not fail on scalability. It fails on
+effectiveness, at a 1.7x runtime premium. The scalability half of the locality argument
+rests on the global variant below, not on this one.
+
+## Global observability cannot be deployed at another size
+
+The global-observability variant is absent from every table above, and not by omission.
+Its actor consumes one block per moving body, so its input width is `7 + 9n` rather than
+the `7 + 15k` of a locality-constrained actor. A policy trained at 150 agents has 2,707
+inputs and cannot be loaded against a 1,000-object catalog at all: the first layer is the
+wrong shape.
+
+Scalability testing deploys a *frozen* policy at increasing sizes without retraining. A
+variant whose parameters depend on the population fails that test by construction, before
+any runtime is measured. Retraining it per size would also be self-defeating — the first
+layer alone holds about 346,000 weights at 150 agents and would hold 23 million at 10,000.
+
+This is the scalability half of the locality argument, and it is structural rather than
+empirical. The safety half — that the variant does not learn to avoid anything even at a
+fixed size — is in [ABLATIONS.md](ABLATIONS.md).
+
 ## Co-located catalog objects
 
 The first sweep reported 159 collisions. All of them were the ISS: Zarya, Unity,

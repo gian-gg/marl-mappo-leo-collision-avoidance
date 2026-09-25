@@ -375,3 +375,40 @@ def test_densify_copies_payloads_into_new_planes() -> None:
     for copy in copies[:20]:
         assert copy.line2[8:16] == copy.line2[8:16]
         assert int(copy.line2[68]) == tle_checksum(copy.line2)
+
+
+def test_simulation_settings_carry_the_radius_selection_to_the_encoder() -> None:
+    """The scalability sweep must honour the ablation's neighbour selection."""
+    from orbitzoo.thesis.scalability.simulator import SimulationSettings
+    from orbitzoo.thesis.maneuvers.contract import ManeuverConfig
+    from orbitzoo.thesis.environments.safety import SafetyConfig
+
+    settings = SimulationSettings(
+        neighborhood_size=4,
+        decision_interval_seconds=120,
+        duration_seconds=240,
+        fine_step_seconds=10,
+        safety=SafetyConfig(),
+        maneuver=ManeuverConfig(0.5, 7.0, 300.0, 60.0),
+        dry_mass_kg=200.0,
+        initial_fuel_mass_kg=50.0,
+        maximum_relative_speed_mps=20_000.0,
+        neighbor_selection="radius",
+        neighbor_radius_meters=1_000_000.0,
+    )
+    settings.validate()
+
+    assert settings.neighbor_selection == "radius"
+    with pytest.raises(ValueError, match="neighbor_selection"):
+        SimulationSettings(
+            neighborhood_size=1,
+            decision_interval_seconds=120,
+            duration_seconds=240,
+            fine_step_seconds=10,
+            safety=SafetyConfig(),
+            maneuver=ManeuverConfig(0.5, 7.0, 300.0, 60.0),
+            dry_mass_kg=200.0,
+            initial_fuel_mass_kg=50.0,
+            maximum_relative_speed_mps=20_000.0,
+            neighbor_selection="global",
+        ).validate()

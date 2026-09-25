@@ -101,6 +101,9 @@ heuristic that the methodology names.
 [Ablations](results/ABLATIONS.md) remove locality in both directions — selecting the
 neighbour by proximity, and removing selection entirely — and show the policy fails
 either way, against a control model trained under the ablations' own protocol.
+[Convergence](results/CONVERGENCE.md) reports the fifth evaluation measure for every
+variant, and shows it separates a variant that never trained from one that trained
+cleanly and learned to do nothing.
 
 The actor now receives fixed-width, threat-ranked local observations containing
 `k` relative-neighbour blocks with explicit padding masks. The critic receives

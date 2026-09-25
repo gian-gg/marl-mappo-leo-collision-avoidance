@@ -23,7 +23,7 @@ measured. Most methods have a matching results document.
 | [K_DT_CALIBRATION.md](methods/K_DT_CALIBRATION.md) | [K_DT_RESULTS.md](results/K_DT_RESULTS.md) |
 | [MANEUVER_SIZING.md](methods/MANEUVER_SIZING.md) | [MANEUVER_SIZING_RESULTS.md](results/MANEUVER_SIZING_RESULTS.md) |
 | [TRAINING.md](methods/TRAINING.md) | [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md), [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md) |
-| [EVALUATION.md](methods/EVALUATION.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md) , [ABLATIONS.md](results/ABLATIONS.md) |
+| [EVALUATION.md](methods/EVALUATION.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md), [ABLATIONS.md](results/ABLATIONS.md), [CONVERGENCE.md](results/CONVERGENCE.md) |
 | [SCALABILITY.md](methods/SCALABILITY.md) | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) |
 
 ## Results — what was measured
@@ -43,6 +43,7 @@ claimed.
 | [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md) | what a cheaper policy costs, across four delta-v penalties |
 | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) | catalog-scale results and what they show about LEO |
 | [ABLATIONS.md](results/ABLATIONS.md) | whether locality is what makes the policy work |
+| [CONVERGENCE.md](results/CONVERGENCE.md) | whether each policy's training settled, and on what |
 
 ## Reading order
 

@@ -31,8 +31,9 @@ return to the nominal slot is counted. No policy caused a collision in any run.
 | [COLLINEAR_BASELINE.md](COLLINEAR_BASELINE.md) | Against the heuristic the methodology names, the actor is 53% safer and 26% cheaper on the benchmark, 20% and 22% at 10,000 agents. Along-track burns change the orbital period, so drift and the return burn dominate their cost. |
 | [MULTITHREAT_BENCHMARK.md](MULTITHREAT_BENCHMARK.md) | The margin over the rule is entirely in simultaneous multi-threat, and grows with it: 2.9 points at 15% of the mix, 7.5 at 100%, winning 59 of 60 episodes. |
 | [FUEL_TRADEOFF.md](FUEL_TRADEOFF.md) | Charging more for fuel removes the margin rather than the waste. The burns that look precautionary are the policy acting before a conjunction develops. |
+| [CONVERGENCE.md](CONVERGENCE.md) | Policy convergence for every variant. The measure discriminates in one direction only: failing to converge predicts a useless policy, but converging predicts nothing — the global variant converged cleanly on doing nothing. |
 | [ABLATIONS.md](ABLATIONS.md) | Removing locality breaks the policy both ways: selecting by proximity resolves 7.4% against 93.4%, and global observability trains cleanly to a policy that never manoeuvres. A control model shows the curriculum is not what produces the result. |
-| [SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md) | Cost per satellite is flat to 10,000 agents. On the real catalogue the actor ties the rule, because the encounters it is best at are rare there. |
+| [SCALABILITY_RESULTS.md](SCALABILITY_RESULTS.md) | Cost per satellite is flat to 10,000 agents. On the real catalogue the actor ties the rule, because the encounters it is best at are rare there. Both ablations are swept too: fixed radius resolves an eighth of what threat ranking does at 1.7x the runtime, and global observability cannot be deployed at another size at all. |
 
 ## Two measurements about LEO itself
 

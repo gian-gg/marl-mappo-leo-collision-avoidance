@@ -65,6 +65,8 @@ class SimulationSettings:
     initial_fuel_mass_kg: float
     maximum_relative_speed_mps: float
     merge_gap_seconds: float = 600.0
+    neighbor_selection: str = "ranked"
+    neighbor_radius_meters: float = 1_000_000.0
 
     def validate(self) -> None:
         if self.decision_interval_seconds <= 0 or self.fine_step_seconds <= 0:
@@ -73,6 +75,10 @@ class SimulationSettings:
             raise ValueError("duration_seconds must be a multiple of decision_interval_seconds")
         if self.decision_interval_seconds % self.fine_step_seconds:
             raise ValueError("decision_interval_seconds must be a multiple of fine_step_seconds")
+        if self.neighbor_selection not in ("ranked", "radius"):
+            raise ValueError("neighbor_selection must be 'ranked' or 'radius'")
+        if self.neighbor_radius_meters <= 0:
+            raise ValueError("neighbor_radius_meters must be positive")
         if self.dry_mass_kg <= 0 or self.initial_fuel_mass_kg < 0:
             raise ValueError("dry mass must be positive and fuel cannot be negative")
 
@@ -165,6 +171,8 @@ def simulate(
             agent_indices,
             settings.neighborhood_size,
             settings.safety,
+            selection=settings.neighbor_selection,
+            radius_meters=settings.neighbor_radius_meters,
         )
         stage["observation"] += time.perf_counter() - clock
 
