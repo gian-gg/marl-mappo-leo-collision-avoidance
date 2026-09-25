@@ -12,6 +12,23 @@ state are never used.
 
 Without `--policy`, the no-op and rule-based baselines are compared.
 
+Checkpoints are run deterministically, taking the most likely action. A policy whose
+argmax never fires a thruster therefore evaluates at exactly zero delta-v even if it
+would manoeuvre under sampling.
+
+## Comparing ablations
+
+An ablation that changes the observation also changes the actor width, so it needs its
+own environment config — `configs/eval_radius.json`, `configs/eval_global.json` — and
+cannot appear in the same `oz evaluate` call as the adopted policy. The runs are made
+comparable by sharing scenario seeds: the no-op row is identical across the files, which
+confirms the episodes match.
+
+Ablations are compared against **control**, not against the adopted policy. Control is
+the unmodified encoder trained under the ablations' protocol, so the comparison isolates
+the observation change from the training change. See
+[ABLATIONS.md](../results/ABLATIONS.md).
+
 ## Policies
 
 | Spec | Policy |

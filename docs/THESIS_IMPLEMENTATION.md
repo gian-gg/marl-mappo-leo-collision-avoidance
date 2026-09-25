@@ -98,6 +98,9 @@ that situation occurs, the per-agent cost to 10,000 agents, and the fuel penalty
 and shows the margin depends on the burns a cheaper policy stops making;
 [collinear baseline](results/COLLINEAR_BASELINE.md) measures the traditional along-track
 heuristic that the methodology names.
+[Ablations](results/ABLATIONS.md) remove locality in both directions — selecting the
+neighbour by proximity, and removing selection entirely — and show the policy fails
+either way, against a control model trained under the ablations' own protocol.
 
 The actor now receives fixed-width, threat-ranked local observations containing
 `k` relative-neighbour blocks with explicit padding masks. The critic receives

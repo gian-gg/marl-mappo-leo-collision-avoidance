@@ -26,6 +26,23 @@ the direction in which the threat is predicted to pass.
 Missing neighbours are zero-padded. The actor width is therefore `7 + 15k` and
 does not depend on constellation size.
 
+## Neighbour selection
+
+`neighbor_selection` chooses how the `k` blocks are filled. The default is what the
+thesis proposes; the other two exist for the ablations in
+[ABLATIONS.md](../results/ABLATIONS.md).
+
+| Mode | Fills the blocks with | Actor width |
+| --- | --- | --- |
+| `ranked` | The `k` neighbours ranked by predicted threat | `7 + 15k` |
+| `radius` | The `k` nearest objects within `neighbor_radius_meters` | `7 + 15k` |
+| `global` | Every moving body, no selection | `7 + 9n` |
+
+`global` makes the actor width a function of the population, so `local_observation_dim`
+raises and callers must use `observation_dim(num_bodies)`. A policy trained in this mode
+cannot be flown at a different population, which is why the scalability results cover
+`ranked` and `radius` only.
+
 The feature order for one neighbour block is:
 
 | Features | Width | Normalization |
