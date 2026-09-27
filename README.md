@@ -1,4 +1,4 @@
-# Scalable Collision Avoidance in Large LEO Constellations
+# marl-mappo-leo-collision-avoidance
 
 Multi-agent reinforcement learning for autonomous collision avoidance in low Earth
 orbit, trained and evaluated on real two-line element catalogue data.
