@@ -29,7 +29,7 @@ Control and v4 are statistically indistinguishable:
 | Benchmark | v4 | Control | p |
 | --- | ---: | ---: | ---: |
 | Standard, 150 agents | 7.45 | 6.65 | 0.056 |
-| Multi-threat, 100 agents | 21.90 | 20.45 | 0.096 |
+| Multi-threat, 150 agents | 21.90 | 20.45 | 0.096 |
 
 The curriculum is therefore not what produces v4's result, and control is a fair
 comparator for the ablations.
@@ -50,7 +50,7 @@ identical no-op row across the three files confirms it.
 | Fixed radius | 93.70 | 7.4% | 40.7 | 0.322 | 403.7 |
 | Global | 101.20 | 0.0% | 40.6 | 0.000 | 423.3 |
 
-Multi-threat benchmark, double threats at 100% of the mix, 100 agents:
+Multi-threat benchmark, double threats at 100% of the mix, 150 agents:
 
 | Policy | Close approaches | Resolved | Delta-v | Unsafe steps |
 | --- | ---: | ---: | ---: | ---: |

@@ -23,7 +23,8 @@ seed always rebuilds the same episode, so runs are reproducible and resumable.
 3. **Agents.** Real agent-candidate satellites from `data/full`, propagated with SGP4
    to the date and converted from TEME to EME2000, the frame the environment uses.
 4. **Threats, built backwards.** For each threat, fly the agent to a meeting time
-   (8–16.5 min, matching the measured warning times), place the threat there using a
+   (6–16.5 min in training, lowered from 8 min in trial 9; the frozen evaluation
+   benchmark keeps 8–16.5 min, matching the measured warning times), place the threat there using a
    real close call's miss vector and relative velocity (both in the agent's RSW
    frame), then propagate the threat backwards to the episode start. Propagation uses
    the environment's own J2 gravity model, so if nobody maneuvers the close call

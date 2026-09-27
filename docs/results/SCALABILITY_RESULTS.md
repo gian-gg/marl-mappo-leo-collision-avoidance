@@ -17,8 +17,10 @@ physics-based rule on safety and costs the same per satellite as doing nothing.
 | 5,000 | 79 | 7 (91.1%) | 2 (97.5%) | 3 (96.2%) | 3 (96.2%) |
 | 10,000 | 118 | 10 (91.5%) | 5 (95.8%) | 8 (93.2%) | 6 (94.9%) |
 
-Conjunctions remaining, and the share of the no-op total resolved. 19,984 objects,
-6 hours, 1 km safe separation. No collisions under any policy at any size.
+Conjunctions remaining, and the share of the no-op total avoided, `1 − remaining / no-op`.
+This share is net: a conjunction a policy's own maneuver creates counts against it
+(one for v4 and seed 7 at 10,000 agents, one for collinear at 1,000–5,000). 19,984
+objects, 6 hours, 1 km safe separation. No collisions under any policy at any size.
 
 The rule ends 1–3 conjunctions ahead at the two largest sizes. Two training seeds of
 the same configuration differ by 2 at 10,000 agents, so that margin is the size of
@@ -54,7 +56,9 @@ no-op reference (`configs/scalability_radius.json`, `k = 4`, 1,000 km).
 | 5,000 | 79 | 11 (13.9%) | **76 (96.2%)** |
 | 10,000 | 118 | 15 (12.7%) | **111 (94.1%)** |
 
-19,984 objects, 6 hours. Across the catalog sweep at 349 maneuvering satellites the
+No-op conjunctions resolved, not net of conjunctions the maneuvers create; at 10,000
+agents v4 resolves 111 of 118 (94.1%) but creates one, leaving 8 (93.2% net, as in the
+headline). 19,984 objects, 6 hours. Across the catalog sweep at 349 maneuvering satellites the
 radius variant resolves **zero** conjunctions at every size while still spending
 delta-v, where v4 resolves all of them.
 
