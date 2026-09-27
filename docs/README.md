@@ -3,8 +3,27 @@
 Start with [THESIS_IMPLEMENTATION.md](THESIS_IMPLEMENTATION.md) for the architecture,
 repository layout, reproducibility conventions, and current status.
 
+For a short plain-language overview of the whole study, read
+[summary/](summary/README.md) first.
+
 Everything else is either how the system works, how to run a study, or what a study
 measured. Most methods have a matching results document.
+
+## Summary — the whole study in brief
+
+| Document | Draws on |
+| --- | --- |
+| [00-calibration.md](summary/00-calibration.md) | [K_DT_RESULTS.md](results/K_DT_RESULTS.md), [MANEUVER_SIZING_RESULTS.md](results/MANEUVER_SIZING_RESULTS.md) |
+| [01-environment.md](summary/01-environment.md) | [COLLISION_AVOIDANCE_ENVIRONMENT.md](design/COLLISION_AVOIDANCE_ENVIRONMENT.md), [MANEUVER_CONTRACT.md](design/MANEUVER_CONTRACT.md) |
+| [02-scenarios.md](summary/02-scenarios.md) | [TRAINING_SCENARIOS.md](design/TRAINING_SCENARIOS.md) |
+| [03-training.md](summary/03-training.md) | [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md), [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md) |
+| [04-baselines.md](summary/04-baselines.md) | [EVALUATION.md](methods/EVALUATION.md), [ABLATIONS.md](results/ABLATIONS.md) |
+| [05-ablations.md](summary/05-ablations.md) | [ABLATIONS.md](results/ABLATIONS.md), [CONVERGENCE.md](results/CONVERGENCE.md) |
+| [06-evaluation.md](summary/06-evaluation.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md) |
+| [07-scalability.md](summary/07-scalability.md) | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) |
+| [08-limitations.md](summary/08-limitations.md) | the limitations sections of the documents above |
+
+The summary leaves out the six-direction rule baseline; see the results documents for it.
 
 ## Design — how the system works
 
@@ -46,6 +65,8 @@ claimed.
 | [CONVERGENCE.md](results/CONVERGENCE.md) | whether each policy's training settled, and on what |
 
 ## Reading order
+
+For an overview: [summary/](summary/README.md), in file order.
 
 For the result: [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md), then
 [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md) for where the advantage
