@@ -12,8 +12,9 @@
 | [01-environment](01-environment.md) | agent architecture, what the policy sees, does and is rewarded for |
 | [02-scenarios](02-scenarios.md) | how episodes are built, train/test split |
 | [03-training](03-training.md) | the curriculum, network, seed repeat, convergence, runtime |
-| [04-baselines](04-baselines.md) | no-op, collinear, fixed radius, global |
-| [05-ablations](05-ablations.md) | how the ablations were trained and why they fail |
-| [06-evaluation](06-evaluation.md) | safety and significance, fuel, coordination, multi-threat, fuel trade-off |
-| [07-scalability](07-scalability.md) | real catalog up to 10,000 satellites, denser orbits |
-| [08-limitations](08-limitations.md) | what the results do not show |
+| [04-hyperparameters](04-hyperparameters.md) | MAPPO, per-stage and reward settings |
+| [05-baselines](05-baselines.md) | no-op, collinear, fixed radius, global |
+| [06-ablations](06-ablations.md) | how the ablations were trained and why they fail |
+| [07-evaluation](07-evaluation.md) | safety and significance, fuel, coordination, multi-threat, fuel trade-off |
+| [08-scalability](08-scalability.md) | real catalog up to 10,000 satellites, denser orbits |
+| [09-limitations](09-limitations.md) | what the results do not show |
