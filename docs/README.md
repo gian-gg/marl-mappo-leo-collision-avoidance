@@ -13,16 +13,17 @@ measured. Most methods have a matching results document.
 
 | Document | Draws on |
 | --- | --- |
-| [00-calibration.md](summary/00-calibration.md) | [K_DT_RESULTS.md](results/K_DT_RESULTS.md), [MANEUVER_SIZING_RESULTS.md](results/MANEUVER_SIZING_RESULTS.md) |
-| [01-environment.md](summary/01-environment.md) | [COLLISION_AVOIDANCE_ENVIRONMENT.md](design/COLLISION_AVOIDANCE_ENVIRONMENT.md), [MANEUVER_CONTRACT.md](design/MANEUVER_CONTRACT.md) |
-| [02-scenarios.md](summary/02-scenarios.md) | [TRAINING_SCENARIOS.md](design/TRAINING_SCENARIOS.md) |
-| [03-training.md](summary/03-training.md) | [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md), [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md) |
-| [04-hyperparameters.md](summary/04-hyperparameters.md) | `configs/mappo_stage{1,2,3}.json` |
-| [05-baselines.md](summary/05-baselines.md) | [EVALUATION.md](methods/EVALUATION.md), [ABLATIONS.md](results/ABLATIONS.md) |
-| [06-ablations.md](summary/06-ablations.md) | [ABLATIONS.md](results/ABLATIONS.md), [CONVERGENCE.md](results/CONVERGENCE.md) |
-| [07-evaluation.md](summary/07-evaluation.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md) |
-| [08-scalability.md](summary/08-scalability.md) | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) |
-| [09-limitations.md](summary/09-limitations.md) | the limitations sections of the documents above |
+| [00-dataset.md](summary/00-dataset.md) | [K_DT_RESULTS.md](results/K_DT_RESULTS.md), [TRAINING_SCENARIOS.md](design/TRAINING_SCENARIOS.md), [SCALABILITY.md](methods/SCALABILITY.md) |
+| [01-calibration.md](summary/01-calibration.md) | [K_DT_RESULTS.md](results/K_DT_RESULTS.md), [MANEUVER_SIZING_RESULTS.md](results/MANEUVER_SIZING_RESULTS.md) |
+| [02-environment.md](summary/02-environment.md) | [COLLISION_AVOIDANCE_ENVIRONMENT.md](design/COLLISION_AVOIDANCE_ENVIRONMENT.md), [MANEUVER_CONTRACT.md](design/MANEUVER_CONTRACT.md) |
+| [03-scenarios.md](summary/03-scenarios.md) | [TRAINING_SCENARIOS.md](design/TRAINING_SCENARIOS.md) |
+| [04-training.md](summary/04-training.md) | [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md), [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md) |
+| [05-hyperparameters.md](summary/05-hyperparameters.md) | `configs/mappo_stage{1,2,3}.json` |
+| [06-baselines.md](summary/06-baselines.md) | [EVALUATION.md](methods/EVALUATION.md), [ABLATIONS.md](results/ABLATIONS.md) |
+| [07-ablations.md](summary/07-ablations.md) | [ABLATIONS.md](results/ABLATIONS.md), [CONVERGENCE.md](results/CONVERGENCE.md) |
+| [08-evaluation.md](summary/08-evaluation.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md) |
+| [09-scalability.md](summary/09-scalability.md) | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) |
+| [10-limitations.md](summary/10-limitations.md) | the limitations sections of the documents above |
 
 The summary leaves out the six-direction rule baseline; see the results documents for it.
 

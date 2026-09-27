@@ -8,13 +8,14 @@
 
 | File | Covers |
 |---|---|
-| [00-calibration](00-calibration.md) | choosing k, Δt and Δv |
-| [01-environment](01-environment.md) | agent architecture, what the policy sees, does and is rewarded for |
-| [02-scenarios](02-scenarios.md) | how episodes are built, train/test split |
-| [03-training](03-training.md) | the curriculum, network, seed repeat, convergence, runtime |
-| [04-hyperparameters](04-hyperparameters.md) | MAPPO, per-stage and reward settings |
-| [05-baselines](05-baselines.md) | no-op, collinear, fixed radius, global |
-| [06-ablations](06-ablations.md) | how the ablations were trained and why they fail |
-| [07-evaluation](07-evaluation.md) | safety and significance, fuel, coordination, multi-threat, fuel trade-off |
-| [08-scalability](08-scalability.md) | real catalog up to 10,000 satellites, denser orbits |
-| [09-limitations](09-limitations.md) | what the results do not show |
+| [00-dataset](00-dataset.md) | the catalogs, filters, split, and how each experiment uses them |
+| [01-calibration](01-calibration.md) | choosing k, Δt and Δv |
+| [02-environment](02-environment.md) | agent architecture, what the policy sees, does and is rewarded for |
+| [03-scenarios](03-scenarios.md) | how episodes are built, train/test split |
+| [04-training](04-training.md) | the curriculum, network, seed repeat, convergence, runtime |
+| [05-hyperparameters](05-hyperparameters.md) | MAPPO, per-stage and reward settings |
+| [06-baselines](06-baselines.md) | no-op, collinear, fixed radius, global |
+| [07-ablations](07-ablations.md) | how the ablations were trained and why they fail |
+| [08-evaluation](08-evaluation.md) | safety and significance, fuel, coordination, multi-threat, fuel trade-off |
+| [09-scalability](09-scalability.md) | real catalog up to 10,000 satellites, denser orbits |
+| [10-limitations](10-limitations.md) | what the results do not show |
