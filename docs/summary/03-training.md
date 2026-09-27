@@ -8,7 +8,7 @@ v4 was trained with MAPPO in three stages. The satellite count rises from stage 
 | 2 | 64 | 110 | 0.01 | adds double threats and satellite pairs |
 | 3 | 150 | 135 | 0.01 | same as stage 2 |
 
-Total training time was about 4 hours on an M1 MacBook Air. The final policy is the stage 3 checkpoint.
+The final policy is the stage 3 checkpoint.
 
 **Network:** the actor has 22 inputs, hidden layers of 128 and 64 units, and 7 outputs, about 11,700 weights in total. The critic (training only) has hidden layers of 256 and 128.
 
@@ -29,3 +29,29 @@ The whole curriculum was retrained from scratch with a second seed and evaluated
 | 7 | 7.05 | 93.0% |
 
 The result does not depend on one lucky run. Differences smaller than the 0.40 gap between seeds are within training noise.
+
+## Convergence
+
+A run has converged when return stops rising and entropy stops falling.
+
+| Stage | Satellites | Return gained | Entropy at end |
+|---|---:|---:|---:|
+| 1 | 16 | 15.99 | 0.119 |
+| 2 | 64 | 0.92 | 0.094 |
+| 3 | 150 | 0.19 | 0.069 |
+
+- Stage 1 does almost all the learning. It settles at update 81 of 125.
+- Stages 2 and 3 adapt the policy to more satellites rather than relearning.
+- Stage 3 ends with a return of 12.91 and settles by update 12. Over its last quarter the return varies by about 5%, so the policy is stable.
+
+## Runtime
+
+Training ran on an Apple M1 MacBook Air (8 GB).
+
+| Stage | Satellites | Median update | Wall clock |
+|---|---:|---:|---:|
+| 1 | 16 | 25.4 s | 53 min |
+| 2 | 64 | 34.5 s | 64 min |
+| 3 | 150 | 56.6 s | 2 h 7 min |
+
+Total: 4 h 4 min. Runtime at deployment scale is in the scalability section.

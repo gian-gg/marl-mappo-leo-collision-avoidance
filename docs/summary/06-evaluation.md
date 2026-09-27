@@ -28,7 +28,18 @@ Metrics:
 | | Global | 148.35 | 0.0% | 39.8 |
 | | v4 | 21.90 | 85.2% | 165.2 |
 
-v4 beat collinear in 19 of 20 standard episodes and all 20 multi-threat episodes. Both ablations lose to v4 on both benchmarks.
+### Significance
+
+Every policy plays the same 20 episodes, so each comparison is paired and tested with the Wilcoxon signed-rank test on close approaches per episode.
+
+| Comparison | Benchmark | v4 better in | p |
+|---|---|---:|---:|
+| v4 vs collinear | Standard | 19 of 20 | 0.0001 |
+| v4 vs collinear | Multi-threat | 20 of 20 | 0.00009 |
+| v4 vs fixed radius | Both | — | 0.0001 |
+| v4 vs global | Both | — | 0.0001 |
+
+All differences are significant. The tests measure variation between episodes, not between training seeds.
 
 ## Fuel (standard, delta-v in m/s per agent)
 
@@ -74,6 +85,6 @@ To see whether v4 could burn less, the whole curriculum was retrained with a hig
 | fuel4 | 4 | 13.45 | 86.7% | 0.783 |
 | fuel8 | 8 | 52.05 | 48.6% | 0.513 |
 
-Charging more for fuel saves little and costs a lot of safety. About a quarter of v4's burns happen before a threat is flagged, acting early, and a higher penalty removes exactly those. v4's penalty was kept.
+Charging more for fuel saves little and costs a lot of safety. Against v4, fuel2 has more close approaches at p = 0.045 and fuel4 at p = 0.0001. About a quarter of v4's burns happen before a threat is flagged, acting early, and a higher penalty removes exactly those. v4's penalty was kept.
 
 **Result:** v4 is about 53% safer than collinear and 26% cheaper in total fuel. Fixed radius and global are close to doing nothing.

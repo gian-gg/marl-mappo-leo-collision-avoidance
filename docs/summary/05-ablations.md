@@ -20,4 +20,4 @@
 - Seeing everything does not help. The policy cannot learn which object to act on, so it does nothing.
 - A training run can look healthy and still produce a useless policy. Safety is judged by close approaches, not training return.
 
-**Control:** a copy of v4's setup, trained in the same two phases as global, scores the same as v4 (6.65 vs 7.45 close approaches). The ablations lose because of what they see, not how they were trained.
+**Control:** a copy of v4's setup, trained in the same two phases as global, scores the same as v4 (6.65 vs 7.45 close approaches, p = 0.056, not significant). The ablations lose because of what they see, not how they were trained.

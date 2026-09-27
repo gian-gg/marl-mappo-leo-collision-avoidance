@@ -9,11 +9,11 @@
 | File | Covers |
 |---|---|
 | [00-calibration](00-calibration.md) | choosing k, Δt and Δv |
-| [01-environment](01-environment.md) | what the policy sees, does and is rewarded for |
+| [01-environment](01-environment.md) | agent architecture, what the policy sees, does and is rewarded for |
 | [02-scenarios](02-scenarios.md) | how episodes are built, train/test split |
-| [03-training](03-training.md) | the curriculum, network, seed repeat |
+| [03-training](03-training.md) | the curriculum, network, seed repeat, convergence, runtime |
 | [04-baselines](04-baselines.md) | no-op, collinear, fixed radius, global |
 | [05-ablations](05-ablations.md) | how the ablations were trained and why they fail |
-| [06-evaluation](06-evaluation.md) | safety, fuel, coordination, multi-threat, fuel trade-off |
+| [06-evaluation](06-evaluation.md) | safety and significance, fuel, coordination, multi-threat, fuel trade-off |
 | [07-scalability](07-scalability.md) | real catalog up to 10,000 satellites, denser orbits |
 | [08-limitations](08-limitations.md) | what the results do not show |

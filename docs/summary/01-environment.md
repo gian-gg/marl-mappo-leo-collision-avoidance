@@ -4,6 +4,21 @@ Each controlled satellite is an agent. All agents share one policy (the actor) a
 
 During training, a critic sees the whole scene and helps the actor learn. Only the actor is used after training.
 
+## Agent architecture
+
+Each decision passes through six modules, in order:
+
+| Module | What it does |
+|---|---|
+| Local perception | Builds the satellite's 22-input observation |
+| Conjunction risk assessment | Screens every pair, ranks threats, predicts the top one along curved orbits |
+| Decision-making | The shared actor picks one of 7 actions |
+| Maneuver planning | Turns the action into a finite burn, or rejects it if fuel or burn time is short |
+| Locality-constrained coordination | Each satellite acts on its own view only, with no communication |
+| Maneuver execution | Orekit applies the burn and propagates the orbit for 120 s |
+
+The critic sits outside this loop and is used only in training.
+
 ## What the actor sees (22 inputs)
 
 - **Itself (7):** position, velocity, and fuel left.
