@@ -54,11 +54,12 @@ class FixedEpisodeSource:
 class GeneratedEpisodeSource:
     """Builds a new environment per seed from real orbits and real close-call shapes."""
 
-    def __init__(self, config: ExperimentConfig) -> None:
+    def __init__(self, config: ExperimentConfig, interface_config: dict[str, Any] | None = None) -> None:
         from orbitzoo.thesis.scenarios.generator import ScenarioGenerator
         from orbitzoo.thesis.scenarios.pools import load_pools
 
         self.config = config
+        self.interface_config = interface_config
         self.generator = ScenarioGenerator(
             config.scenario_generator,
             load_pools(config.scenario_generator),
@@ -70,7 +71,10 @@ class GeneratedEpisodeSource:
 
     def environment(self, seed: int) -> CollisionAvoidanceEnv:
         scenario = self.generator.generate(seed)
-        env = _make_environment(self.config, scenario.orbitzoo_kwargs)
+        orbitzoo_kwargs = scenario.orbitzoo_kwargs
+        if self.interface_config is not None:
+            orbitzoo_kwargs = {**orbitzoo_kwargs, "render": True, "interface_config": self.interface_config}
+        env = _make_environment(self.config, orbitzoo_kwargs)
         env.scenario = scenario
         return env
 

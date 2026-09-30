@@ -11,6 +11,7 @@ from orbitzoo.cli.run_file import add_run_parser
 from orbitzoo.cli.scale import add_scale_parser
 from orbitzoo.cli.size_maneuvers import add_size_maneuvers_parser
 from orbitzoo.cli.train import add_train_parser
+from orbitzoo.cli.watch import add_watch_parser
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -29,6 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_evaluate_parser(subparsers)
     add_scale_parser(subparsers)
     add_size_maneuvers_parser(subparsers)
+    add_watch_parser(subparsers)
     return parser
 
 

@@ -220,7 +220,7 @@ class Interface:
     def save_screenshot(self, filename = 'screenshot.jpg'):
         pygame.image.save(self.screen, filename)
 
-    def frame(self, epoch: AbsoluteDate, save_path = None, info = None):
+    def frame(self, epoch: AbsoluteDate, save_path = None, info = None, overlay = None):
 
         save_points = save_path != None
         projected_points = {}
@@ -423,6 +423,10 @@ class Interface:
             # self.screen.blit(label_year, rect_year)
             # self.screen.blit(label_payloads, rect_payloads)
             # self.screen.blit(label_debris, rect_debris)
+
+        # draw caller overlay on top of the scene
+        if overlay is not None:
+            overlay(self.screen)
 
         handle_camera_with_keys()
         pygame.display.update()

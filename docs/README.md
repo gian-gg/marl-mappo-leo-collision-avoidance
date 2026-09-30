@@ -46,6 +46,7 @@ The summary leaves out the six-direction rule baseline; see the results document
 | [TRAINING.md](methods/TRAINING.md) | [TRAINING_TRIALS.md](results/TRAINING_TRIALS.md), [TRAINING_RESULTS.md](results/TRAINING_RESULTS.md) |
 | [EVALUATION.md](methods/EVALUATION.md) | [COLLINEAR_BASELINE.md](results/COLLINEAR_BASELINE.md), [MULTITHREAT_BENCHMARK.md](results/MULTITHREAT_BENCHMARK.md), [FUEL_TRADEOFF.md](results/FUEL_TRADEOFF.md), [ABLATIONS.md](results/ABLATIONS.md), [CONVERGENCE.md](results/CONVERGENCE.md) |
 | [SCALABILITY.md](methods/SCALABILITY.md) | [SCALABILITY_RESULTS.md](results/SCALABILITY_RESULTS.md) |
+| [VISUALIZATION.md](methods/VISUALIZATION.md) | watching a checkpoint fly one held-out episode |
 
 ## Results — what was measured
 

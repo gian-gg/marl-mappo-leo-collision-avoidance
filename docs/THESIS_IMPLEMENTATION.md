@@ -85,6 +85,8 @@ against the full TLE catalog, sweeping catalog size and agent count, and reports
 conjunctions, maneuver-induced secondary conjunctions, delta-v, and per-stage cost.
 [Maneuver sizing](methods/MANEUVER_SIZING.md) (`oz size-maneuvers`) derives the per-action
 delta-v and minimum thrust from the reference conjunctions.
+[Visualization](methods/VISUALIZATION.md) (`oz watch`) flies a checkpoint through one
+held-out episode in the headed OrbitZoo viewer, optionally recording an mp4.
 [Training scenarios](design/TRAINING_SCENARIOS.md) are generated per episode from real
 orbits and real close-call geometry, in a 16 → 64 → 150 agent curriculum.
 [Training trials](results/TRAINING_TRIALS.md) record the short runs that chose the reward
